@@ -60,6 +60,7 @@ def parse_week(filepath, label, date):
         "date": date,
         "matchPoints": {},
         "skins": {},
+        "skinsByHole": {},
         "handicaps": {},
         "scorecards": [],
     }
@@ -100,6 +101,17 @@ def parse_week(filepath, label, date):
                 week["matchPoints"][current_team] = val
             else:
                 week["skins"][current_team] = val
+        elif mode == "skins" and parts[0].isdigit() and current_team:
+            # Parse holes won (space-separated or comma-separated)
+            holes_str = parts[1] if len(parts) > 1 else ""
+            holes = []
+            if holes_str:
+                # Try space-separated first, then comma
+                if " " in holes_str:
+                    holes = [int(h) for h in holes_str.split() if h.isdigit()]
+                else:
+                    holes = [int(h) for h in holes_str.split(",") if h.isdigit()]
+            week["skinsByHole"][current_team] = sorted(holes)
         if mode == "skins" and l == "" and current_team:
             mode = None
 
