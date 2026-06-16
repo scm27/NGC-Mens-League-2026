@@ -780,37 +780,98 @@ function renderScorecard() {
 }
 
 // ═══════════════════════════════════════
-//  HANDICAPS
+//  HANDICAPS & ROLLING CALCULATION
 // ═══════════════════════════════════════
 let hdcpChart = null;
 
+/**
+ * Calculates a player's rolling handicap up to a specific week index.
+ * It looks backward to find the 4 most recent rounds actually played.
+ */
+function calculateRollingHandicap(playerName, upToWeekIndex) {
+  let scoresOverPar = [];
+
+  // Traverse backward from the target week to gather past rounds
+  for (let i = upToWeekIndex; i >= 0; i--) {
+    const week = weeks[i];
+    if (!week || !week.scorecards) continue;
+
+    // Find the scorecard containing this player
+    const card = week.scorecards.find(sc => sc.players.some(p => p.name === playerName));
+    if (card) {
+      const playerObj = card.players.find(p => p.name === playerName);
+      let totalScore = 0;
+      let totalPar = 0;
+      let playedHoles = 0;
+
+      // Sum up the active scores and pars for this specific round
+      card.par.forEach((p, hIdx) => {
+        const s = playerObj.scores[hIdx];
+        if (s !== null && s !== undefined && p) {
+          totalScore += s;
+          totalPar += p;
+          playedHoles++;
+        }
+      });
+
+      // If they posted scores, record their total relative to par
+      if (playedHoles > 0) {
+        scoresOverPar.push(totalScore - totalPar);
+      }
+    }
+
+    // Break early once we successfully gather the last 4 played rounds
+    if (scoresOverPar.length === 4) break;
+  }
+
+  // Fallback if no rounds played yet
+  if (scoresOverPar.length === 0) return 0;
+
+  // Return the straight average of the scores relative to par
+  const sum = scoresOverPar.reduce((a, b) => a + b, 0);
+  return sum / scoresOverPar.length;
+}
+
 function renderHandicaps() {
-  const latest = weeks[weeks.length - 1];
+  const latestIdx = weeks.length - 1;
+  const latest = weeks[latestIdx];
   const tbody = document.getElementById('hdcp-tbody');
   tbody.innerHTML = '';
 
   // Group latest handicaps by team
   const teamHdcps = Object.keys(teamMap).map(tid => {
     const p = teamPlayers(tid);
-    const h1 = latest.handicaps[p[0]] ?? 0;
-    const h2 = latest.handicaps[p[1]] ?? 0;
-    return { tid, name: teamName(tid), p1: p[0], h1, p2: p[1], h2, total: h1 + h2 };
+    const h1_orig = latest.handicaps[p[0]] ?? 0;
+    const h2_orig = latest.handicaps[p[1]] ?? 0;
+    
+    // Compute the dynamic rolling handicap for the current week
+    const h1_roll = calculateRollingHandicap(p[0], latestIdx);
+    const h2_roll = calculateRollingHandicap(p[1], latestIdx);
+    
+    return { 
+      tid, 
+      name: teamName(tid), 
+      p1: p[0], h1_orig, h1_roll, 
+      p2: p[1], h2_orig, h2_roll, 
+      total_roll: h1_roll + h2_roll 
+    };
   });
 
-  // Sort by combined handicap ascending (lowest handicap teams first)
-  teamHdcps.sort((a,b) => a.total - b.total || a.name.localeCompare(b.name));
+  // Sort the table by lowest combined rolling handicap
+  teamHdcps.sort((a,b) => a.total_roll - b.total_roll || a.name.localeCompare(b.name));
 
   for (const t of teamHdcps) {
     tbody.innerHTML += `<tr>
       <td><strong>${t.name}</strong></td>
       <td style="color:var(--text-muted);font-size:0.8rem;">
-        ${t.p1} (${t.h1 > 0 ? t.h1.toFixed(1) : 'Scr'}) &amp; ${t.p2} (${t.h2 > 0 ? t.h2.toFixed(1) : 'Scr'})
+        ${t.p1} (${t.h1_orig > 0 ? t.h1_orig.toFixed(1) : 'Scr'} ➔ <strong>${t.h1_roll.toFixed(1)}</strong>) &amp; 
+        ${t.p2} (${t.h2_orig > 0 ? t.h2_orig.toFixed(1) : 'Scr'} ➔ <strong>${t.h2_roll.toFixed(1)}</strong>)
       </td>
-      <td class="num"><strong>${t.total > 0 ? t.total.toFixed(1) : 'Scratch'}</strong></td>
+      <td class="num"><strong>${t.total_roll > 0 ? t.total_roll.toFixed(1) : 'Scratch'}</strong></td>
     </tr>`;
   }
 
-  // Populate Team Selector for Chart
+  // Populate Team Selector for Chart if it hasn't been initialized
   const sel = document.getElementById('hdcp-team-select');
   if (sel.options.length === 0) {
     Object.entries(teamMap)
@@ -826,9 +887,9 @@ function renderHdcpChart() {
   const players = teamPlayers(tid);
   const labels = weeks.map(w => w.label);
   
-  // Create datasets for both players
-  const data1 = weeks.map(w => w.handicaps[players[0]] ?? null);
-  const data2 = weeks.map(w => w.handicaps[players[1]] ?? null);
+  // Calculate historical rolling handicap arrays for the trend line
+  const data1 = weeks.map((w, idx) => calculateRollingHandicap(players[0], idx));
+  const data2 = weeks.map((w, idx) => calculateRollingHandicap(players[1], idx));
 
   const ctx = document.getElementById('hdcp-chart').getContext('2d');
   if (hdcpChart) hdcpChart.destroy();
@@ -839,7 +900,7 @@ function renderHdcpChart() {
       labels,
       datasets: [
         {
-          label: players[0],
+          label: `${players[0]} (4-Wk Rolling)`,
           data: data1,
           borderColor: '#2d5a40',
           backgroundColor: 'rgba(45,90,64,0.12)',
@@ -850,7 +911,7 @@ function renderHdcpChart() {
           spanGaps: true,
         },
         {
-          label: players[1] || 'Player 2',
+          label: `${players[1] || 'Player 2'} (4-Wk Rolling)`,
           data: data2,
           borderColor: '#c9a84c',
           backgroundColor: 'rgba(201,168,76,0.12)',
@@ -869,14 +930,14 @@ function renderHdcpChart() {
         legend: { display: true, position: 'top', labels: { usePointStyle: true, boxWidth: 8, color: '#5a7060' } },
         tooltip: {
           callbacks: {
-            label: ctx => `${ctx.dataset.label}: ${ctx.raw === 0 ? 'Scratch' : ctx.raw}`
+            label: ctx => `${ctx.dataset.label}: ${ctx.raw === 0 ? 'Scratch' : ctx.raw.toFixed(1)}`
           }
         }
       },
       scales: {
         y: {
           min: 0,
-          title: { display: true, text: 'Handicap', color: '#5a7060' },
+          title: { display: true, text: 'Handicap Index', color: '#5a7060' },
           grid: { color: '#e0e8dc' },
           ticks: { color: '#5a7060' }
         },
