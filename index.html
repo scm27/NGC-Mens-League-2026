@@ -892,8 +892,8 @@ function renderHdcpChart() {
   const officialData2 = weeks.map(w => w.handicaps[players[1]] ?? null);
 
   // 2. Gather historical Rolling Handicaps
-  const rollingData1 = weeks.map((w, idx) => getRollingHandicap(players[0], idx));
-  const rollingData2 = weeks.map((w, idx) => getRollingHandicap(players[1], idx));
+  const rollingData1 = weeks.map((w, idx) => calculateRollingHandicap(players[0], idx));
+  const rollingData2 = weeks.map((w, idx) => calculateRollingHandicap(players[1], idx));
 
   const ctx = document.getElementById('hdcp-chart').getContext('2d');
   if (hdcpChart) hdcpChart.destroy();
