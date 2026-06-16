@@ -1,0 +1,398 @@
+
+Week 3,"Jun 2, 2026"
+
+Players
+Name,Handicap,Role,Joined,WHS Id,Email,Phone,DOB,Gender,Tee,Cart,Total fees,Paid,Won,Paid out,Owes
+Russ P,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Troy C,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Scott N,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Cory S,Not set,Player,false,,,,,,,,$3,$0,$22,$0,-$19
+Ken B,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+John L,Not set,Player,false,,,,,,,,$3,$0,$2.20,$0,$0.80
+Rich -,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Bill B,Not set,Player,false,,,,,,,,$3,$0,$2.20,$0,$0.80
+Charlie M,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Mark S,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Jim Mott,Not set,Player,false,,,,,,,,$3,$0,$2.20,$0,$0.80
+Travis C,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Herb P,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Ray King,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Pickles -,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Bruce S,Not set,Player,false,,,,,,,,$3,$0,$2.20,$0,$0.80
+Dave D,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+John C,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Bill P,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Paul K,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Boomer -,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Bryan L,Not set,Player,false,,,,,,,,$3,$0,$22,$0,-$19
+Schetter -,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Ben C,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Tim C,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Tom N,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Matt -,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Rodney S,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+John M,Not set,Player,false,,,,,,,,$3,$0,$2.20,$0,$0.80
+Andy S,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Jeff George,Not set,Player,true,,,,,,,,$3,$0,$22,$0,-$19
+David M,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Gavin M,Not set,Player,false,,,,,,,,$3,$0,$13.20,$0,-$10.20
+Tom M,Not set,Player,false,,,,,,,,$3,$0,$2.20,$0,$0.80
+Don J,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Gary M,Not set,Player,false,,,,,,,,$3,$0,$13.20,$0,-$10.20
+Steve G,Not set,Player,false,,,,,,,,$3,$0,$2.20,$0,$0.80
+Andrew George,Not set,Player,true,,,,,,,,$3,$0,$22,$0,-$19
+Steve M,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Dan B,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Bill T,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Derek -,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+Joe J,Not set,Player,false,,,,,,,,$3,$0,$2.20,$0,$0.80
+Tom K,Not set,Player,false,,,,,,,,$3,$0,$0,$0,$3
+
+Team Matchplay
+Team,Player,Round 1,Total
+16,,7.5,7.5
+,Gary M,-2,
+,Gavin M,-2,
+5,,6,6
+,Bruce S,E,
+,Tom M,E,
+13,,6,6
+,Steve G,+1,
+,Joe J,+1,
+19,,6,6
+,Bill B,-1,
+,Jim Mott,-1,
+7,,6,6
+,John L,+2,
+,John M,+2,
+4,,5.5,5.5
+,Scott N,-1,
+,John C,-1,
+11,,5.5,5.5
+,Andy S,-1,
+,Rodney S,-1,
+17,,5.5,5.5
+,Andrew George,-3,
+,Jeff George,-3,
+21,,5,5
+,Dan B,-1,
+,Schetter -,-1,
+1,,5,5
+,Dave D,-1,
+,Ken B,-1,
+6,,5,5
+,David M,E,
+,Pickles -,E,
+22,,4,4
+,Derek -,+3,
+,Rich -,+3,
+12,,4,4
+,Boomer -,E,
+,Steve M,E,
+9,,4,4
+,Troy C,+1,
+,Bill P,+1,
+2,,3.5,3.5
+,Herb P,+2,
+,Russ P,+2,
+8,,3.5,3.5
+,Paul K,-2,
+,Tom N,-2,
+3,,3.5,3.5
+,Bryan L,+3,
+,Cory S,+3,
+18,,3,3
+,Tim C,+4,
+,Travis C,+4,
+15,,3,3
+,Tom K,+3,
+,Charlie M,+3,
+10,,3,3
+,Mark S,+4,
+,Ray King,+4,
+14,,3,3
+,Ben C,+4,
+,Bill T,+4,
+20,,1.5,1.5
+,Don J,+14,
+,Matt -,+14,
+
+Team Skins
+Team,Player,Round 1,Total
+3,,1,1
+,Bryan L,,
+,Cory S,,
+17,,1,1
+,Andrew George,,
+,Jeff George,,
+4,,0,0
+,Scott N,,
+,John C,,
+22,,0,0
+,Derek -,,
+,Rich -,,
+12,,0,0
+,Boomer -,,
+,Steve M,,
+16,,0,0
+,Gary M,,
+,Gavin M,,
+2,,0,0
+,Herb P,,
+,Russ P,,
+21,,0,0
+,Dan B,,
+,Schetter -,,
+8,,0,0
+,Paul K,,
+,Tom N,,
+5,,0,0
+,Bruce S,,
+,Tom M,,
+18,,0,0
+,Tim C,,
+,Travis C,,
+1,,0,0
+,Dave D,,
+,Ken B,,
+15,,0,0
+,Tom K,,
+,Charlie M,,
+10,,0,0
+,Mark S,,
+,Ray King,,
+11,,0,0
+,Andy S,,
+,Rodney S,,
+13,,0,0
+,Steve G,,
+,Joe J,,
+9,,0,0
+,Troy C,,
+,Bill P,,
+19,,0,0
+,Bill B,,
+,Jim Mott,,
+6,,0,0
+,David M,,
+,Pickles -,,
+14,,0,0
+,Ben C,,
+,Bill T,,
+7,,0,0
+,John L,,
+,John M,,
+20,,0,0
+,Don J,,
+,Matt -,,
+
+
+Round 1
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+Gary M,Men Tee tee,3.0,3,4,5,4,4,3,6,4,4,37,,,,,,,,,,0,37
+,Scramble,3.0,-1,+1,E,E,-1,-1,+2,-1,-1,-2,,,,,,,,,,,-2
+,Team gross skins,,-1,+1,E,E,E,E,+2,E,-1,,,,,,,,,,,,
+Gavin M,Men Tee tee,3.0,3,4,5,4,4,3,6,4,4,37,,,,,,,,,,0,37
+,Scramble,3.0,-1,+1,E,E,-1,-1,+2,-1,-1,-2,,,,,,,,,,,-2
+,Team gross skins,,-1,+1,E,E,E,E,+2,E,-1,,,,,,,,,,,,
+Don J,Men Tee tee,6.0,5,4,6,5,6,6,7,9,8,56,,,,,,,,,,0,56
+,Scramble,6.0,E,E,+1,+1,+1,+2,+2,+4,+3,+14,,,,,,,,,,,+14
+,Team gross skins,,+1,+1,+1,+1,+2,+3,+3,+5,+3,,,,,,,,,,,,
+Matt -,Men Tee tee,6.0,5,4,6,5,6,6,7,9,8,56,,,,,,,,,,0,56
+,Scramble,6.0,E,E,+1,+1,+1,+2,+2,+4,+3,+14,,,,,,,,,,,+14
+,Team gross skins,,+1,+1,+1,+1,+2,+3,+3,+5,+3,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+David M,Men Tee tee,0.0,4,3,5,4,4,3,4,4,5,36,,,,,,,,,,0,36
+,Scramble,0.0,E,E,E,E,E,E,E,E,E,E,,,,,,,,,,,E
+,Team gross skins,,E,E,E,E,E,E,E,E,E,,,,,,,,,,,,
+Pickles -,Men Tee tee,0.0,4,3,5,4,4,3,4,4,5,36,,,,,,,,,,0,36
+,Scramble,0.0,E,E,E,E,E,E,E,E,E,E,,,,,,,,,,,E
+,Team gross skins,,E,E,E,E,E,E,E,E,E,,,,,,,,,,,,
+Derek -,Men Tee tee,4.0,5,4,5,4,4,4,4,5,8,43,,,,,,,,,,0,43
+,Scramble,4.0,E,+1,E,E,-1,E,E,E,+3,+3,,,,,,,,,,,+3
+,Team gross skins,,+1,+1,E,E,E,+1,E,+1,+3,,,,,,,,,,,,
+Rich -,Men Tee tee,4.0,5,4,5,4,4,4,4,5,8,43,,,,,,,,,,0,43
+,Scramble,4.0,E,+1,E,E,-1,E,E,E,+3,+3,,,,,,,,,,,+3
+,Team gross skins,,+1,+1,E,E,E,+1,E,+1,+3,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+Herb P,Men Tee tee,0.0,5,3,5,4,4,4,4,4,5,38,,,,,,,,,,0,38
+,Scramble,0.0,+1,E,E,E,E,+1,E,E,E,+2,,,,,,,,,,,+2
+,Team gross skins,,+1,E,E,E,E,+1,E,E,E,,,,,,,,,,,,
+Russ P,Men Tee tee,0.0,5,3,5,4,4,4,4,4,5,38,,,,,,,,,,0,38
+,Scramble,0.0,+1,E,E,E,E,+1,E,E,E,+2,,,,,,,,,,,+2
+,Team gross skins,,+1,E,E,E,E,+1,E,E,E,,,,,,,,,,,,
+Andy S,Men Tee tee,0.0,3,3,4,4,4,4,5,4,4,35,,,,,,,,,,0,35
+,Scramble,0.0,-1,E,-1,E,E,+1,+1,E,-1,-1,,,,,,,,,,,-1
+,Team gross skins,,-1,E,-1,E,E,+1,+1,E,-1,,,,,,,,,,,,
+Rodney S,Men Tee tee,0.0,3,3,4,4,4,4,5,4,4,35,,,,,,,,,,0,35
+,Scramble,0.0,-1,E,-1,E,E,+1,+1,E,-1,-1,,,,,,,,,,,-1
+,Team gross skins,,-1,E,-1,E,E,+1,+1,E,-1,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+Tom K,Men Tee tee,6.0,6,4,6,5,4,4,5,5,6,45,,,,,,,,,,0,45
+,Scramble,6.0,+1,E,+1,+1,-1,E,E,E,+1,+3,,,,,,,,,,,+3
+,Team gross skins,,+2,+1,+1,+1,E,+1,+1,+1,+1,,,,,,,,,,,,
+Charlie M,Men Tee tee,6.0,6,4,6,5,4,4,5,5,6,45,,,,,,,,,,0,45
+,Scramble,6.0,+1,E,+1,+1,-1,E,E,E,+1,+3,,,,,,,,,,,+3
+,Team gross skins,,+2,+1,+1,+1,E,+1,+1,+1,+1,,,,,,,,,,,,
+Bruce S,Men Tee tee,1.0,4,2,5,4,4,3,5,5,5,37,,,,,,,,,,0,37
+,Scramble,1.0,E,-1,E,E,E,-1,+1,+1,E,E,,,,,,,,,,,E
+,Team gross skins,,E,-1,E,E,E,E,+1,+1,E,,,,,,,,,,,,
+Tom M,Men Tee tee,1.0,4,2,5,4,4,3,5,5,5,37,,,,,,,,,,0,37
+,Scramble,1.0,E,-1,E,E,E,-1,+1,+1,E,E,,,,,,,,,,,E
+,Team gross skins,,E,-1,E,E,E,E,+1,+1,E,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+John L,Men Tee tee,0.0,4,3,4,6,5,3,5,4,4,38,,,,,,,,,,0,38
+,Scramble,0.0,E,E,-1,+2,+1,E,+1,E,-1,+2,,,,,,,,,,,+2
+,Team gross skins,,E,E,-1,+2,+1,E,+1,E,-1,,,,,,,,,,,,
+John M,Men Tee tee,0.0,4,3,4,6,5,3,5,4,4,38,,,,,,,,,,0,38
+,Scramble,0.0,E,E,-1,+2,+1,E,+1,E,-1,+2,,,,,,,,,,,+2
+,Team gross skins,,E,E,-1,+2,+1,E,+1,E,-1,,,,,,,,,,,,
+Ben C,Men Tee tee,0.0,4,3,5,3,6,5,5,4,5,40,,,,,,,,,,0,40
+,Scramble,0.0,E,E,E,-1,+2,+2,+1,E,E,+4,,,,,,,,,,,+4
+,Team gross skins,,E,E,E,-1,+2,+2,+1,E,E,,,,,,,,,,,,
+Bill T,Men Tee tee,0.0,4,3,5,3,6,5,5,4,5,40,,,,,,,,,,0,40
+,Scramble,0.0,E,E,E,-1,+2,+2,+1,E,E,+4,,,,,,,,,,,+4
+,Team gross skins,,E,E,E,-1,+2,+2,+1,E,E,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+Paul K,Men Tee tee,5.0,5,3,5,4,4,4,4,5,5,39,,,,,,,,,,0,39
+,Scramble,5.0,E,E,E,E,-1,E,-1,E,E,-2,,,,,,,,,,,-2
+,Team gross skins,,+1,E,E,E,E,+1,E,+1,E,,,,,,,,,,,,
+Tom N,Men Tee tee,5.0,5,3,5,4,4,4,4,5,5,39,,,,,,,,,,0,39
+,Scramble,5.0,E,E,E,E,-1,E,-1,E,E,-2,,,,,,,,,,,-2
+,Team gross skins,,+1,E,E,E,E,+1,E,+1,E,,,,,,,,,,,,
+Andrew George,Men Tee tee,0.0,4,2,4,4,5,3,4,3,4,33,,,,,,,,,,0,33
+,Scramble,0.0,E,-1,-1,E,+1,E,E,-1,-1,-3,,,,,,,,,,,-3
+,Team gross skins,,E,-1,-1,E,+1,E,E,-1,-1,,,,,,,,,,,,
+Jeff George,Men Tee tee,0.0,4,2,4,4,5,3,4,3,4,33,,,,,,,,,,0,33
+,Scramble,0.0,E,-1,-1,E,+1,E,E,-1,-1,-3,,,,,,,,,,,-3
+,Team gross skins,,E,-1,-1,E,+1,E,E,-1,-1,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+Mark S,Men Tee tee,3.0,4,3,5,4,6,5,4,6,6,43,,,,,,,,,,0,43
+,Scramble,3.0,E,E,E,E,+1,+1,E,+1,+1,+4,,,,,,,,,,,+4
+,Team gross skins,,E,E,E,E,+2,+2,E,+2,+1,,,,,,,,,,,,
+Ray King,Men Tee tee,3.0,4,3,5,4,6,5,4,6,6,43,,,,,,,,,,0,43
+,Scramble,3.0,E,E,E,E,+1,+1,E,+1,+1,+4,,,,,,,,,,,+4
+,Team gross skins,,E,E,E,E,+2,+2,E,+2,+1,,,,,,,,,,,,
+Steve G,Men Tee tee,0.0,5,3,4,4,4,3,5,4,5,37,,,,,,,,,,0,37
+,Scramble,0.0,+1,E,-1,E,E,E,+1,E,E,+1,,,,,,,,,,,+1
+,Team gross skins,,+1,E,-1,E,E,E,+1,E,E,,,,,,,,,,,,
+Joe J,Men Tee tee,0.0,5,3,4,4,4,3,5,4,5,37,,,,,,,,,,0,37
+,Scramble,0.0,+1,E,-1,E,E,E,+1,E,E,+1,,,,,,,,,,,+1
+,Team gross skins,,+1,E,-1,E,E,E,+1,E,E,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+Troy C,Men Tee tee,0.0,3,4,4,4,4,4,5,4,5,37,,,,,,,,,,0,37
+,Scramble,0.0,-1,+1,-1,E,E,+1,+1,E,E,+1,,,,,,,,,,,+1
+,Team gross skins,,-1,+1,-1,E,E,+1,+1,E,E,,,,,,,,,,,,
+Bill P,Men Tee tee,0.0,3,4,4,4,4,4,5,4,5,37,,,,,,,,,,0,37
+,Scramble,0.0,-1,+1,-1,E,E,+1,+1,E,E,+1,,,,,,,,,,,+1
+,Team gross skins,,-1,+1,-1,E,E,+1,+1,E,E,,,,,,,,,,,,
+Dave D,Men Tee tee,2.0,4,5,5,4,4,3,4,4,4,37,,,,,,,,,,0,37
+,Scramble,2.0,E,+2,E,E,-1,-1,E,E,-1,-1,,,,,,,,,,,-1
+,Team gross skins,,E,+2,E,E,E,E,E,E,-1,,,,,,,,,,,,
+Ken B,Men Tee tee,2.0,4,5,5,4,4,3,4,4,4,37,,,,,,,,,,0,37
+,Scramble,2.0,E,+2,E,E,-1,-1,E,E,-1,-1,,,,,,,,,,,-1
+,Team gross skins,,E,+2,E,E,E,E,E,E,-1,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+Tim C,Men Tee tee,0.0,5,4,5,5,5,3,4,4,5,40,,,,,,,,,,0,40
+,Scramble,0.0,+1,+1,E,+1,+1,E,E,E,E,+4,,,,,,,,,,,+4
+,Team gross skins,,+1,+1,E,+1,+1,E,E,E,E,,,,,,,,,,,,
+Travis C,Men Tee tee,0.0,5,4,5,5,5,3,4,4,5,40,,,,,,,,,,0,40
+,Scramble,0.0,+1,+1,E,+1,+1,E,E,E,E,+4,,,,,,,,,,,+4
+,Team gross skins,,+1,+1,E,+1,+1,E,E,E,E,,,,,,,,,,,,
+Bill B,Men Tee tee,3.0,5,4,4,3,4,5,4,4,5,38,,,,,,,,,,0,38
+,Scramble,3.0,+1,+1,-1,-1,-1,+1,E,-1,E,-1,,,,,,,,,,,-1
+,Team gross skins,,+1,+1,-1,-1,E,+2,E,E,E,,,,,,,,,,,,
+Jim Mott,Men Tee tee,3.0,5,4,4,3,4,5,4,4,5,38,,,,,,,,,,0,38
+,Scramble,3.0,+1,+1,-1,-1,-1,+1,E,-1,E,-1,,,,,,,,,,,-1
+,Team gross skins,,+1,+1,-1,-1,E,+2,E,E,E,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+Boomer -,Men Tee tee,5.0,4,5,5,5,5,3,5,4,5,41,,,,,,,,,,0,41
+,Scramble,5.0,-1,+2,E,+1,E,-1,E,-1,E,E,,,,,,,,,,,E
+,Team gross skins,,E,+2,E,+1,+1,E,+1,E,E,,,,,,,,,,,,
+Steve M,Men Tee tee,5.0,4,5,5,5,5,3,5,4,5,41,,,,,,,,,,0,41
+,Scramble,5.0,-1,+2,E,+1,E,-1,E,-1,E,E,,,,,,,,,,,E
+,Team gross skins,,E,+2,E,+1,+1,E,+1,E,E,,,,,,,,,,,,
+Dan B,Men Tee tee,4.0,4,4,5,5,4,4,4,4,5,39,,,,,,,,,,0,39
+,Scramble,4.0,-1,+1,E,+1,-1,E,E,-1,E,-1,,,,,,,,,,,-1
+,Team gross skins,,E,+1,E,+1,E,+1,E,E,E,,,,,,,,,,,,
+Schetter -,Men Tee tee,4.0,4,4,5,5,4,4,4,4,5,39,,,,,,,,,,0,39
+,Scramble,4.0,-1,+1,E,+1,-1,E,E,-1,E,-1,,,,,,,,,,,-1
+,Team gross skins,,E,+1,E,+1,E,+1,E,E,E,,,,,,,,,,,,
+
+
+
+Nahma Golf Club,"Jun 2, 2026 6:00 PM"
+,,Handicap,Hole 1,Hole 2,Hole 3,Hole 4,Hole 5,Hole 6,Hole 7,Hole 8,Hole 9,Out,Hole 10,Hole 11,Hole 12,Hole 13,Hole 14,Hole 15,Hole 16,Hole 17,Hole 18,In,Total
+S.I.,,,4,6,8,9,2,1,5,3,7,,10,11,12,13,14,15,16,17,18
+Par,,,4,3,5,4,4,3,4,4,5,36,4,3,5,4,4,3,4,4,5,36,72
+Bryan L,Men Tee tee,0.0,4,3,5,6,6,2,4,5,4,39,,,,,,,,,,0,39
+,Scramble,0.0,E,E,E,+2,+2,-1,E,+1,-1,+3,,,,,,,,,,,+3
+,Team gross skins,,E,E,E,+2,+2,-1,E,+1,-1,,,,,,,,,,,,
+Cory S,Men Tee tee,0.0,4,3,5,6,6,2,4,5,4,39,,,,,,,,,,0,39
+,Scramble,0.0,E,E,E,+2,+2,-1,E,+1,-1,+3,,,,,,,,,,,+3
+,Team gross skins,,E,E,E,+2,+2,-1,E,+1,-1,,,,,,,,,,,,
+Scott N,Men Tee tee,0.0,4,3,5,4,4,3,4,4,4,35,,,,,,,,,,0,35
+,Scramble,0.0,E,E,E,E,E,E,E,E,-1,-1,,,,,,,,,,,-1
+,Team gross skins,,E,E,E,E,E,E,E,E,-1,,,,,,,,,,,,
+John C,Men Tee tee,0.0,4,3,5,4,4,3,4,4,4,35,,,,,,,,,,0,35
+,Scramble,0.0,E,E,E,E,E,E,E,E,-1,-1,,,,,,,,,,,-1
+,Team gross skins,,E,E,E,E,E,E,E,E,-1,,,,,,,,,,,,

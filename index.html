@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NGC Tuesday Night Men's League 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap');
+
+  :root {
+    --green-deep:   #1a3a2a;
+    --green-mid:    #2d5a40;
+    --green-light:  #4a8c62;
+    --gold:         #c9a84c;
+    --gold-pale:    #f0e0a8;
+    --fairway:      #e8f0e4;
+    --rough:        #c8d8c0;
+    --white:        #ffffff;
+    --text:         #1a2820;
+    --text-muted:   #5a7060;
+    --border:       #c0d0c4;
+    --red:          #c0392b;
+    --birdie:       #2471a3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--green-deep);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--green-deep);
+    border-bottom: 3px solid var(--gold);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-title {
+    padding: 16px 0;
+  }
+
+  .header-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+
+  .header-title p {
+    color: var(--rough);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  nav {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  nav button {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rough);
+    background: transparent;
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  nav button:hover { color: var(--gold-pale); }
+  nav button.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ── MAIN ── */
+  main {
+    background: var(--fairway);
+    min-height: calc(100vh - 72px);
+    padding: 28px 20px 48px;
+  }
+
+  .page { display: none; max-width: 960px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--green-deep);
+    margin-bottom: 6px;
+  }
+
+  .page-sub {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    background: var(--green-mid);
+    color: var(--gold-pale);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-body { padding: 18px; }
+
+  /* ── TABLES ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  .data-table th {
+    background: var(--green-deep);
+    color: var(--gold-pale);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 9px 12px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .data-table th.num { text-align: right; }
+
+  .data-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .data-table td.num {
+    text-align: right;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: #f6faf5; }
+  .data-table tr:hover td { background: var(--gold-pale); transition: background 0.1s; }
+
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .rank-1 { background: var(--gold); color: var(--green-deep); }
+  .rank-2 { background: #b0b8b0; color: var(--white); }
+  .rank-3 { background: #a07850; color: var(--white); }
+  .rank-other { background: var(--rough); color: var(--text); }
+
+  .pts-pill {
+    display: inline-block;
+    background: var(--green-light);
+    color: var(--white);
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+
+  .skin-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin: 0 2px;
+  }
+
+  /* ── SELECTORS ── */
+  .selector-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+
+  .selector-row label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  select {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 7px 12px;
+    cursor: pointer;
+    outline: none;
+    min-width: 160px;
+  }
+
+  select:focus { border-color: var(--green-light); }
+
+  /* ── SCORECARD ── */
+  .scorecard-wrap { overflow-x: auto; }
+
+  .scorecard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8rem;
+    min-width: 620px;
+  }
+
+  .scorecard-table th {
+    background: var(--green-deep);
+    color: var(--gold-pale);
+    padding: 7px 8px;
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+
+  .scorecard-table th.left { text-align: left; padding-left: 14px; }
+
+  .scorecard-table td {
+    padding: 8px 8px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  .scorecard-table td.left {
+    text-align: left;
+    padding-left: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .scorecard-table td.par-row { background: var(--rough); font-weight: 500; color: var(--green-deep); }
+  .scorecard-table td.total-col { background: #eaf3e8; font-weight: 600; }
+  .scorecard-table tr.player-row:nth-child(odd) td { background: #f8fbf7; }
+  .scorecard-table tr.player-row:nth-child(even) td { background: var(--white); }
+
+  .score-birdie { background: var(--birdie) !important; color: var(--white); border-radius: 50%; display:inline-flex; align-items:center;justify-content:center; width:22px;height:22px; }
+  .score-eagle  { background: #1a3a6a !important; color: var(--white); border-radius: 50%; display:inline-flex; align-items:center;justify-content:center; width:22px;height:22px; }
+  .score-bogey  { color: var(--red); font-weight: 600; }
+  .score-double { color: var(--red); font-weight: 700; }
+  .score-par    { color: var(--text-muted); }
+
+  /* ── HANDICAP CHART ── */
+  .chart-wrap {
+    position: relative;
+    height: 320px;
+    margin-bottom: 12px;
+  }
+
+  /* ── GRID ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .two-col { grid-template-columns: 1fr; }
+    .header-title h1 { font-size: 1.1rem; }
+    nav button { padding: 10px 10px; font-size: 0.72rem; }
+  }
+
+  /* ── UPLOAD PANEL ── */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    text-align: center;
+    background: #f0f7ee;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--green-light);
+    background: var(--gold-pale);
+  }
+  .upload-zone p { color: var(--text-muted); font-size: 0.9rem; margin-top: 8px; }
+  .upload-icon { font-size: 2.5rem; }
+
+  .upload-result {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    display: none;
+  }
+  .upload-result.ok  { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .upload-result.err { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+  .instr-step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--green-mid);
+    color: var(--gold-pale);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-body { padding-top: 4px; }
+  .step-body strong { display: block; font-size: 0.9rem; color: var(--green-deep); margin-bottom: 2px; }
+  .step-body p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  code {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8rem;
+    background: var(--rough);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; }
+
+  /* ── SKINS ── */
+  .skins-week-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    color: var(--green-deep);
+    margin-bottom: 8px;
+    padding-left: 2px;
+  }
+
+  .winner-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold);
+    color: var(--green-deep);
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin: 3px 4px;
+  }
+
+  .no-skins { color: var(--text-muted); font-style: italic; font-size: 0.85rem; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">
+    <h1>NGC Tuesday Night Men's League</h1>
+    <p>Nahma Golf Club · 2026 Season</p>
+  </div>
+  <nav>
+    <button class="active" onclick="showPage('standings')">Standings</button>
+    <button onclick="showPage('scorecards')">Scorecards</button>
+    <button onclick="showPage('handicaps')">Handicaps</button>
+    <button onclick="showPage('skins')">Skins</button>
+    <button onclick="showPage('upload')">+ Add Week</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ══ STANDINGS ══ -->
+  <div class="page active" id="page-standings">
+    <div class="page-title">Season Standings</div>
+    <div class="page-sub" id="standings-sub"></div>
+    <div class="card">
+      <div class="card-header">
+        <span>Team Leaderboard</span>
+        <span id="standings-week-label" style="font-size:0.8rem;opacity:0.8;"></span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="standings-table">
+          <thead><tr id="standings-thead"></tr></thead>
+          <tbody id="standings-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCORECARDS ══ -->
+  <div class="page" id="page-scorecards">
+    <div class="page-title">Scorecards</div>
+    <div class="page-sub">Hole-by-hole scores for each team</div>
+    <div class="selector-row">
+      <label>Week</label>
+      <select id="sc-week-select"></select>
+      <label>Team</label>
+      <select id="sc-team-select"></select>
+    </div>
+    <div id="scorecard-display"></div>
+  </div>
+
+  <!-- ══ HANDICAPS ══ -->
+  <div class="page" id="page-handicaps">
+    <div class="page-title">Handicaps</div>
+    <div class="page-sub">Player handicaps by week (0 = scratch)</div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header">Current Handicaps</div>
+        <div style="overflow-x:auto;">
+          <table class="data-table" id="hdcp-table">
+            <thead><tr>
+              <th>Player</th>
+              <th>Team</th>
+              <th class="num">Handicap</th>
+            </tr></thead>
+            <tbody id="hdcp-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-header">Trend by Player</div>
+          <div class="card-body">
+            <div class="selector-row" style="margin-bottom:12px;">
+              <label>Player</label>
+              <select id="hdcp-player-select"></select>
+            </div>
+            <div class="chart-wrap"><canvas id="hdcp-chart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SKINS ══ -->
+  <div class="page" id="page-skins">
+    <div class="page-title">Skins</div>
+    <div class="page-sub">Weekly skin winners and season totals</div>
+    <div class="two-col">
+      <div>
+        <div id="skins-weekly"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">Season Skins Totals</div>
+        <div style="overflow-x:auto;">
+          <table class="data-table" id="skins-total-table">
+            <thead><tr>
+              <th>Rank</th>
+              <th>Team</th>
+              <th class="num">Skins</th>
+            </tr></thead>
+            <tbody id="skins-total-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ UPLOAD / ADD WEEK ══ -->
+  <div class="page" id="page-upload">
+    <div class="page-title">Add a New Week</div>
+    <div class="page-sub">Preview a Squabbit CSV export before committing it to the repo</div>
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <div class="card-header">Upload & Preview</div>
+          <div class="card-body">
+            <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+              <div class="upload-icon">⛳</div>
+              <strong>Drop a Squabbit CSV here</strong>
+              <p>or click to browse</p>
+            </div>
+            <input type="file" id="file-input" accept=".csv" style="display:none">
+            <div class="upload-result" id="upload-result"></div>
+            <div id="preview-tables" style="margin-top:16px;"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-header">How to Publish to the Site</div>
+          <div class="card-body">
+            <div class="instr-step">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <strong>Export from Squabbit</strong>
+                <p>After scoring each week, export the round as a CSV file from the Squabbit tournament manager.</p>
+              </div>
+            </div>
+            <div class="instr-step">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <strong>Preview it here first</strong>
+                <p>Drop the CSV on the left to confirm it parses correctly — you'll see the match points and team scores.</p>
+              </div>
+            </div>
+            <div class="instr-step">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Run the update script</strong>
+                <p>Copy the CSV into your repo's <code>data/</code> folder, then run <code>python build.py</code> to rebuild <code>league_data.json</code>.</p>
+              </div>
+            </div>
+            <div class="instr-step">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <strong>Commit &amp; push</strong>
+                <p>Run <code>git add . &amp;&amp; git commit -m "Add Week N" &amp;&amp; git push</code> — GitHub Pages updates in ~30 seconds.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════
+//  DATA — embedded from league_data.json
+// ═══════════════════════════════════════
+const LEAGUE = {"teamMap":{"1":{"players":["Dave D","Ken B"],"name":"Dave/Ken"},"2":{"players":["Herb P","Russ P"],"name":"Herb/Russ"},"3":{"players":["Bryan L","Cory S"],"name":"Bryan/Cory"},"4":{"players":["Scott N","John C"],"name":"Scott/John"},"5":{"players":["Bruce S","Tom M"],"name":"Bruce/Tom"},"6":{"players":["David M","Pickles -"],"name":"David/Pickles"},"7":{"players":["John L","John M"],"name":"John/John"},"8":{"players":["Paul K","Tom N"],"name":"Paul/Tom"},"9":{"players":["Troy C","Bill P"],"name":"Troy/Bill"},"10":{"players":["Mark S","Ray King"],"name":"Mark/Ray"},"11":{"players":["Andy S","Rodney S"],"name":"Andy/Rodney"},"12":{"players":["Boomer -","Steve M"],"name":"Boomer/Steve"},"13":{"players":["Steve G","Joe J"],"name":"Steve/Joe"},"14":{"players":["Ben C","Bill T"],"name":"Ben/Bill"},"15":{"players":["Tom K","Charlie M"],"name":"Tom/Charlie"},"16":{"players":["Gary M","Gavin M"],"name":"Gary/Gavin"},"17":{"players":["Andrew George","Jeff George"],"name":"Andrew/Jeff"},"18":{"players":["Tim C","Travis C"],"name":"Tim/Travis"},"19":{"players":["Bill B","Jim Mott"],"name":"Bill/Jim"},"20":{"players":["Don J","Matt -"],"name":"Don/Matt"},"21":{"players":["Dan B","Schetter -"],"name":"Dan/Schetter"},"22":{"players":["Derek -","Rich -"],"name":"Derek/Rich"}},"weeks":[{"label":"Week 1","date":"May 19, 2026","matchPoints":{"5":7.5,"9":6.5,"17":6.0,"20":6.0,"4":5.5,"16":5.5,"2":5.5,"15":5.5,"8":5.0,"1":5.0,"14":5.0,"21":4.0,"19":4.0,"6":4.0,"22":3.5,"12":3.5,"18":3.5,"7":3.5,"10":3.0,"11":3.0,"3":2.5,"13":1.5},"skins":{"9":1.0,"20":1.0,"4":0.0,"22":0.0,"12":0.0,"16":0.0,"2":0.0,"21":0.0,"8":0.0,"5":0.0,"18":0.0,"1":0.0,"15":0.0,"10":0.0,"11":0.0,"13":0.0,"19":0.0,"6":0.0,"3":0.0,"17":0.0,"14":0.0,"7":0.0},"handicaps":{"Tim C":0.0,"Travis C":0.0,"Gary M":3.0,"Gavin M":3.0,"Derek -":4.0,"Rich -":4.0,"Herb P":0.0,"Russ P":0.0,"Tom K":6.0,"Charlie M":6.0,"John L":0.0,"John M":0.0,"Dan B":4.0,"Schetter -":4.0,"Paul K":5.0,"Tom N":5.0,"Boomer -":5.0,"Steve M":5.0,"Scott N":0.0,"John C":0.0,"Mark S":3.0,"Ray King":3.0,"Don J":6.0,"Matt -":6.0,"Troy C":0.0,"Bill P":0.0,"Bryan L":0.0,"Cory S":0.0,"Bruce S":1.0,"Tom M":1.0,"Steve G":0.0,"Joe J":0.0,"Ben C":0.0,"Bill T":0.0,"David M":0.0,"Pickles -":0.0,"Andrew George":0.0,"Jeff George":0.0,"Andy S":0.0,"Rodney S":0.0,"Dave D":2.0,"Ken B":2.0,"Bill B":3.0,"Jim Mott":3.0},"scorecards":[{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Tim C","handicap":0.0,"scores":[5,3,5,4,4,3,5,4,4]},{"name":"Travis C","handicap":0.0,"scores":[5,3,5,4,4,3,5,4,4]},{"name":"Gary M","handicap":3.0,"scores":[4,3,5,4,5,4,4,4,5]},{"name":"Gavin M","handicap":3.0,"scores":[4,3,5,4,5,4,4,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Derek -","handicap":4.0,"scores":[5,5,6,4,5,4,3,5,6]},{"name":"Rich -","handicap":4.0,"scores":[5,5,6,4,5,4,3,5,6]},{"name":"Herb P","handicap":0.0,"scores":[4,3,6,4,4,3,3,4,5]},{"name":"Russ P","handicap":0.0,"scores":[4,3,6,4,4,3,3,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Tom K","handicap":6.0,"scores":[5,4,5,5,5,4,5,4,6]},{"name":"Charlie M","handicap":6.0,"scores":[5,4,5,5,5,4,5,4,6]},{"name":"John L","handicap":0.0,"scores":[4,4,4,4,5,4,4,4,6]},{"name":"John M","handicap":0.0,"scores":[4,4,4,4,5,4,4,4,6]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Dan B","handicap":4.0,"scores":[5,5,5,4,5,5,5,5,5]},{"name":"Schetter -","handicap":4.0,"scores":[5,5,5,4,5,5,5,5,5]},{"name":"Paul K","handicap":5.0,"scores":[5,4,6,4,6,4,4,5,5]},{"name":"Tom N","handicap":5.0,"scores":[5,4,6,4,6,4,4,5,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Boomer -","handicap":5.0,"scores":[5,3,6,5,5,4,5,4,6]},{"name":"Steve M","handicap":5.0,"scores":[5,3,6,5,5,4,5,4,6]},{"name":"Scott N","handicap":0.0,"scores":[4,3,4,3,5,3,3,4,4]},{"name":"John C","handicap":0.0,"scores":[4,3,4,3,5,3,3,4,4]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Mark S","handicap":3.0,"scores":[5,5,6,4,4,5,6,5,6]},{"name":"Ray King","handicap":3.0,"scores":[5,5,6,4,4,5,6,5,6]},{"name":"Don J","handicap":6.0,"scores":[5,5,5,5,5,2,5,6,5]},{"name":"Matt -","handicap":6.0,"scores":[5,5,5,5,5,2,5,6,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Troy C","handicap":0.0,"scores":[3,4,4,4,4,3,3,4,5]},{"name":"Bill P","handicap":0.0,"scores":[3,4,4,4,4,3,3,4,5]},{"name":"Bryan L","handicap":0.0,"scores":[5,4,4,5,4,5,5,4,5]},{"name":"Cory S","handicap":0.0,"scores":[5,4,4,5,4,5,5,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Bruce S","handicap":1.0,"scores":[4,3,6,4,4,4,4,4,5]},{"name":"Tom M","handicap":1.0,"scores":[4,3,6,4,4,4,4,4,5]},{"name":"Steve G","handicap":0.0,"scores":[5,4,5,4,5,5,6,5,7]},{"name":"Joe J","handicap":0.0,"scores":[5,4,5,4,5,5,6,5,7]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Ben C","handicap":0.0,"scores":[4,3,5,4,3,4,4,4,4]},{"name":"Bill T","handicap":0.0,"scores":[4,3,5,4,3,4,4,4,4]},{"name":"David M","handicap":0.0,"scores":[4,4,5,4,3,3,4,4,5]},{"name":"Pickles -","handicap":0.0,"scores":[4,4,5,4,3,3,4,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Andrew George","handicap":0.0,"scores":[4,3,4,4,4,3,3,4,5]},{"name":"Jeff George","handicap":0.0,"scores":[4,3,4,4,4,3,3,4,5]},{"name":"Andy S","handicap":0.0,"scores":[4,3,5,4,5,3,4,4,5]},{"name":"Rodney S","handicap":0.0,"scores":[4,3,5,4,5,3,4,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Dave D","handicap":2.0,"scores":[4,3,5,4,5,4,4,4,5]},{"name":"Ken B","handicap":2.0,"scores":[4,3,5,4,5,4,4,4,5]},{"name":"Bill B","handicap":3.0,"scores":[5,4,5,3,5,4,5,4,5]},{"name":"Jim Mott","handicap":3.0,"scores":[5,4,5,3,5,4,5,4,5]}]}]},{"label":"Week 2","date":"May 26, 2026","matchPoints":{"22":7.0,"9":6.5,"12":6.0,"2":6.0,"1":6.0,"4":5.5,"16":5.5,"13":5.5,"5":5.0,"11":5.0,"21":4.5,"17":4.5,"15":4.0,"7":4.0,"8":3.5,"3":3.5,"14":3.5,"18":3.0,"6":3.0,"20":3.0,"10":2.5,"19":2.0},"skins":{"22":1.0,"2":1.0,"4":0.0,"12":0.0,"16":0.0,"21":0.0,"8":0.0,"5":0.0,"18":0.0,"1":0.0,"15":0.0,"10":0.0,"11":0.0,"13":0.0,"9":0.0,"19":0.0,"6":0.0,"3":0.0,"17":0.0,"14":0.0,"7":0.0,"20":0.0},"handicaps":{"Steve G":0.0,"Joe J":0.0,"Paul K":5.0,"Tom N":5.0,"Dan B":4.0,"Schetter -":4.0,"Andrew George":0.0,"Jeff George":0.0,"Dave D":2.0,"Ken B":2.0,"Don J":6.0,"Matt -":6.0,"John L":0.0,"John M":0.0,"Bruce S":1.0,"Tom M":1.0,"Scott N":0.0,"John C":0.0,"Ben C":0.0,"Bill T":0.0,"Herb P":0.0,"Russ P":0.0,"Tim C":0.0,"Travis C":0.0,"David M":0.0,"Pickles -":0.0,"Boomer -":5.0,"Steve M":5.0,"Andy S":0.0,"Rodney S":0.0,"Tom K":6.0,"Charlie M":6.0,"Gary M":3.0,"Gavin M":3.0,"Bryan L":0.0,"Cory S":0.0,"Derek -":4.0,"Rich -":4.0,"Bill B":3.0,"Jim Mott":3.0,"Troy C":0.0,"Bill P":0.0,"Mark S":3.0,"Ray King":3.0},"scorecards":[{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Steve G","handicap":0.0,"scores":[4,3,5,5,4,3,4,3,5]},{"name":"Joe J","handicap":0.0,"scores":[4,3,5,5,4,3,4,3,5]},{"name":"Paul K","handicap":5.0,"scores":[5,4,6,4,5,4,4,5,6]},{"name":"Tom N","handicap":5.0,"scores":[5,4,6,4,5,4,4,5,6]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Dan B","handicap":4.0,"scores":[4,4,6,3,6,4,4,4,5]},{"name":"Schetter -","handicap":4.0,"scores":[4,null,6,3,6,4,4,4,5]},{"name":"Andrew George","handicap":0.0,"scores":[4,3,4,4,4,3,4,4,5]},{"name":"Jeff George","handicap":0.0,"scores":[4,3,4,4,4,3,4,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Dave D","handicap":2.0,"scores":[6,3,5,4,5,4,5,4,5]},{"name":"Ken B","handicap":2.0,"scores":[6,3,5,4,5,4,5,4,5]},{"name":"Don J","handicap":6.0,"scores":[7,3,5,6,6,5,4,6,6]},{"name":"Matt -","handicap":6.0,"scores":[7,3,5,6,6,5,4,6,6]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"John L","handicap":0.0,"scores":[4,4,5,4,5,3,3,4,5]},{"name":"John M","handicap":0.0,"scores":[4,4,5,4,5,3,3,4,5]},{"name":"Bruce S","handicap":1.0,"scores":[4,3,4,4,4,3,4,5,6]},{"name":"Tom M","handicap":1.0,"scores":[4,3,4,4,4,3,4,5,6]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Scott N","handicap":0.0,"scores":[5,3,4,3,4,3,4,3,4]},{"name":"John C","handicap":0.0,"scores":[5,3,4,3,4,3,4,3,4]},{"name":"Ben C","handicap":0.0,"scores":[4,3,4,4,4,3,4,5,5]},{"name":"Bill T","handicap":0.0,"scores":[4,3,4,4,4,3,4,5,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Herb P","handicap":0.0,"scores":[4,2,4,4,5,4,4,4,5]},{"name":"Russ P","handicap":0.0,"scores":[null,null,null,null,null,null,null,null,null]},{"name":"Tim C","handicap":0.0,"scores":[5,3,5,5,4,3,5,5,4]},{"name":"Travis C","handicap":0.0,"scores":[5,3,5,5,4,3,5,5,4]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"David M","handicap":0.0,"scores":[4,3,5,4,4,4,3,5,5]},{"name":"Pickles -","handicap":0.0,"scores":[4,3,5,4,4,4,3,5,5]},{"name":"Boomer -","handicap":5.0,"scores":[4,3,5,4,4,3,5,3,5]},{"name":"Steve M","handicap":5.0,"scores":[4,3,5,4,4,3,5,3,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Andy S","handicap":0.0,"scores":[5,3,5,4,4,4,4,4,4]},{"name":"Rodney S","handicap":0.0,"scores":[5,3,5,4,4,4,4,4,4]},{"name":"Tom K","handicap":6.0,"scores":[4,3,6,4,6,3,5,6,6]},{"name":"Charlie M","handicap":6.0,"scores":[4,3,6,4,6,3,5,6,6]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Gary M","handicap":3.0,"scores":[4,4,5,4,5,4,4,4,5]},{"name":"Gavin M","handicap":3.0,"scores":[4,4,5,4,5,4,4,4,5]},{"name":"Bryan L","handicap":0.0,"scores":[4,4,5,5,4,4,4,3,5]},{"name":"Cory S","handicap":0.0,"scores":[4,4,5,5,4,4,4,3,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Derek -","handicap":4.0,"scores":[3,4,5,4,4,4,3,4,5]},{"name":"Rich -","handicap":4.0,"scores":[3,4,5,4,4,4,3,4,5]},{"name":"Bill B","handicap":3.0,"scores":[5,3,6,5,5,4,5,4,6]},{"name":"Jim Mott","handicap":3.0,"scores":[5,3,6,5,5,4,5,4,6]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Troy C","handicap":0.0,"scores":[4,3,4,3,5,3,4,4,5]},{"name":"Bill P","handicap":0.0,"scores":[4,3,4,3,5,3,4,4,5]},{"name":"Mark S","handicap":3.0,"scores":[5,4,4,5,5,4,4,6,6]},{"name":"Ray King","handicap":3.0,"scores":[5,4,4,5,5,4,4,6,6]}]}]},{"label":"Week 3","date":"June 2, 2026","matchPoints":{"16":7.5,"5":6.0,"13":6.0,"19":6.0,"7":6.0,"4":5.5,"11":5.5,"17":5.5,"21":5.0,"1":5.0,"6":5.0,"22":4.0,"12":4.0,"9":4.0,"2":3.5,"8":3.5,"3":3.5,"18":3.0,"15":3.0,"10":3.0,"14":3.0,"20":1.5},"skins":{"3":1.0,"17":1.0,"4":0.0,"22":0.0,"12":0.0,"16":0.0,"2":0.0,"21":0.0,"8":0.0,"5":0.0,"18":0.0,"1":0.0,"15":0.0,"10":0.0,"11":0.0,"13":0.0,"9":0.0,"19":0.0,"6":0.0,"14":0.0,"7":0.0,"20":0.0},"handicaps":{"Gary M":3.0,"Gavin M":3.0,"Don J":6.0,"Matt -":6.0,"David M":0.0,"Pickles -":0.0,"Derek -":4.0,"Rich -":4.0,"Herb P":0.0,"Russ P":0.0,"Andy S":0.0,"Rodney S":0.0,"Tom K":6.0,"Charlie M":6.0,"Bruce S":1.0,"Tom M":1.0,"John L":0.0,"John M":0.0,"Ben C":0.0,"Bill T":0.0,"Paul K":5.0,"Tom N":5.0,"Andrew George":0.0,"Jeff George":0.0,"Mark S":3.0,"Ray King":3.0,"Steve G":0.0,"Joe J":0.0,"Troy C":0.0,"Bill P":0.0,"Dave D":2.0,"Ken B":2.0,"Tim C":0.0,"Travis C":0.0,"Bill B":3.0,"Jim Mott":3.0,"Boomer -":5.0,"Steve M":5.0,"Dan B":4.0,"Schetter -":4.0,"Bryan L":0.0,"Cory S":0.0,"Scott N":0.0,"John C":0.0},"scorecards":[{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Gary M","handicap":3.0,"scores":[3,4,5,4,4,3,6,4,4]},{"name":"Gavin M","handicap":3.0,"scores":[3,4,5,4,4,3,6,4,4]},{"name":"Don J","handicap":6.0,"scores":[5,4,6,5,6,6,7,9,8]},{"name":"Matt -","handicap":6.0,"scores":[5,4,6,5,6,6,7,9,8]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"David M","handicap":0.0,"scores":[4,3,5,4,4,3,4,4,5]},{"name":"Pickles -","handicap":0.0,"scores":[4,3,5,4,4,3,4,4,5]},{"name":"Derek -","handicap":4.0,"scores":[5,4,5,4,4,4,4,5,8]},{"name":"Rich -","handicap":4.0,"scores":[5,4,5,4,4,4,4,5,8]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Herb P","handicap":0.0,"scores":[5,3,5,4,4,4,4,4,5]},{"name":"Russ P","handicap":0.0,"scores":[5,3,5,4,4,4,4,4,5]},{"name":"Andy S","handicap":0.0,"scores":[3,3,4,4,4,4,5,4,4]},{"name":"Rodney S","handicap":0.0,"scores":[3,3,4,4,4,4,5,4,4]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Tom K","handicap":6.0,"scores":[6,4,6,5,4,4,5,5,6]},{"name":"Charlie M","handicap":6.0,"scores":[6,4,6,5,4,4,5,5,6]},{"name":"Bruce S","handicap":1.0,"scores":[4,2,5,4,4,3,5,5,5]},{"name":"Tom M","handicap":1.0,"scores":[4,2,5,4,4,3,5,5,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"John L","handicap":0.0,"scores":[4,3,4,6,5,3,5,4,4]},{"name":"John M","handicap":0.0,"scores":[4,3,4,6,5,3,5,4,4]},{"name":"Ben C","handicap":0.0,"scores":[4,3,5,3,6,5,5,4,5]},{"name":"Bill T","handicap":0.0,"scores":[4,3,5,3,6,5,5,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Paul K","handicap":5.0,"scores":[5,3,5,4,4,4,4,5,5]},{"name":"Tom N","handicap":5.0,"scores":[5,3,5,4,4,4,4,5,5]},{"name":"Andrew George","handicap":0.0,"scores":[4,2,4,4,5,3,4,3,4]},{"name":"Jeff George","handicap":0.0,"scores":[4,2,4,4,5,3,4,3,4]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Mark S","handicap":3.0,"scores":[4,3,5,4,6,5,4,6,6]},{"name":"Ray King","handicap":3.0,"scores":[4,3,5,4,6,5,4,6,6]},{"name":"Steve G","handicap":0.0,"scores":[5,3,4,4,4,3,5,4,5]},{"name":"Joe J","handicap":0.0,"scores":[5,3,4,4,4,3,5,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Troy C","handicap":0.0,"scores":[3,4,4,4,4,4,5,4,5]},{"name":"Bill P","handicap":0.0,"scores":[3,4,4,4,4,4,5,4,5]},{"name":"Dave D","handicap":2.0,"scores":[4,5,5,4,4,3,4,4,4]},{"name":"Ken B","handicap":2.0,"scores":[4,5,5,4,4,3,4,4,4]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Tim C","handicap":0.0,"scores":[5,4,5,5,5,3,4,4,5]},{"name":"Travis C","handicap":0.0,"scores":[5,4,5,5,5,3,4,4,5]},{"name":"Bill B","handicap":3.0,"scores":[5,4,4,3,4,5,4,4,5]},{"name":"Jim Mott","handicap":3.0,"scores":[5,4,4,3,4,5,4,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Boomer -","handicap":5.0,"scores":[4,5,5,5,5,3,5,4,5]},{"name":"Steve M","handicap":5.0,"scores":[4,5,5,5,5,3,5,4,5]},{"name":"Dan B","handicap":4.0,"scores":[4,4,5,5,4,4,4,4,5]},{"name":"Schetter -","handicap":4.0,"scores":[4,4,5,5,4,4,4,4,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Bryan L","handicap":0.0,"scores":[4,3,5,6,6,2,4,5,4]},{"name":"Cory S","handicap":0.0,"scores":[4,3,5,6,6,2,4,5,4]},{"name":"Scott N","handicap":0.0,"scores":[4,3,5,4,4,3,4,4,4]},{"name":"John C","handicap":0.0,"scores":[4,3,5,4,4,3,4,4,4]}]}]},{"label":"Week 4","date":"June 9, 2026","matchPoints":{"4":8.5,"8":7.0,"18":6.5,"17":6.5,"9":6.0,"21":5.5,"5":5.5,"15":5.5,"3":5.5,"12":5.0,"19":5.0,"11":4.0,"7":4.0,"22":3.5,"16":3.5,"6":3.5,"14":3.5,"13":3.0,"2":2.5,"1":2.5,"10":2.0,"20":0.5},"skins":{"4":1.0,"18":1.0,"11":1.0,"13":1.0,"3":1.0,"22":0.0,"12":0.0,"16":0.0,"2":0.0,"21":0.0,"8":0.0,"5":0.0,"1":0.0,"15":0.0,"10":0.0,"9":0.0,"19":0.0,"6":0.0,"17":0.0,"14":0.0,"7":0.0,"20":0.0},"handicaps":{"Herb P":0.0,"Russ P":0.0,"Andrew George":0.0,"Jeff George":0.0,"Bruce S":1.0,"Tom M":1.0,"Gary M":3.0,"Gavin M":3.0,"John L":0.0,"John M":0.0,"Bill B":3.0,"Jim Mott":3.0,"Paul K":5.0,"Tom N":5.0,"Mark S":3.0,"Ray King":3.0,"Derek -":4.0,"Rich -":4.0,"Tom K":6.0,"Charlie M":6.0,"Boomer -":5.0,"Steve M":5.0,"Andy S":0.0,"Rodney S":0.0,"Dave D":2.0,"Ken B":2.0,"Tim C":0.0,"Travis C":0.0,"Bryan L":0.0,"Cory S":0.0,"Ben C":0.0,"Bill T":0.0,"Scott N":0.0,"John C":0.0,"Don J":6.0,"Matt -":6.0,"David M":0.0,"Pickles -":0.0,"Dan B":4.0,"Schetter -":4.0,"Troy C":0.0,"Bill P":0.0,"Steve G":0.0,"Joe J":0.0},"scorecards":[{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Herb P","handicap":0.0,"scores":[5,4,5,5,4,4,4,4,5]},{"name":"Russ P","handicap":0.0,"scores":[5,4,5,5,4,4,4,4,5]},{"name":"Andrew George","handicap":0.0,"scores":[4,3,5,3,4,3,5,4,4]},{"name":"Jeff George","handicap":0.0,"scores":[4,3,5,3,4,3,5,4,4]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Bruce S","handicap":1.0,"scores":[4,3,5,4,4,3,4,4,5]},{"name":"Tom M","handicap":1.0,"scores":[4,3,5,4,4,3,4,4,5]},{"name":"Gary M","handicap":3.0,"scores":[5,4,5,4,4,5,4,5,5]},{"name":"Gavin M","handicap":3.0,"scores":[5,4,5,4,4,5,4,5,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"John L","handicap":0.0,"scores":[4,4,4,4,4,4,4,5,5]},{"name":"John M","handicap":0.0,"scores":[4,4,4,4,4,4,4,5,5]},{"name":"Bill B","handicap":3.0,"scores":[5,3,5,4,5,4,5,5,4]},{"name":"Jim Mott","handicap":3.0,"scores":[5,3,5,4,5,4,5,5,4]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Paul K","handicap":5.0,"scores":[4,4,5,4,6,3,5,5,5]},{"name":"Tom N","handicap":5.0,"scores":[4,4,5,4,6,3,5,5,5]},{"name":"Mark S","handicap":3.0,"scores":[6,4,6,4,5,4,5,6,8]},{"name":"Ray King","handicap":3.0,"scores":[6,4,6,4,5,4,5,6,8]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Derek -","handicap":4.0,"scores":[5,3,5,5,4,3,5,5,4]},{"name":"Rich -","handicap":4.0,"scores":[5,3,5,5,4,3,5,5,4]},{"name":"Tom K","handicap":6.0,"scores":[5,3,5,4,4,4,5,4,6]},{"name":"Charlie M","handicap":6.0,"scores":[5,3,5,4,4,4,5,4,6]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Boomer -","handicap":5.0,"scores":[4,2,5,5,4,4,5,5,5]},{"name":"Steve M","handicap":5.0,"scores":[4,2,5,5,4,4,5,5,5]},{"name":"Andy S","handicap":0.0,"scores":[4,3,4,2,4,3,5,4,4]},{"name":"Rodney S","handicap":0.0,"scores":[4,3,4,2,4,3,5,4,4]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Dave D","handicap":2.0,"scores":[4,3,5,3,6,4,5,4,5]},{"name":"Ken B","handicap":2.0,"scores":[4,3,5,3,6,4,5,4,5]},{"name":"Tim C","handicap":0.0,"scores":[4,3,4,3,4,3,4,3,5]},{"name":"Travis C","handicap":0.0,"scores":[4,3,4,3,4,3,4,3,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Bryan L","handicap":0.0,"scores":[4,4,3,4,5,3,4,4,5]},{"name":"Cory S","handicap":0.0,"scores":[4,4,3,4,5,3,4,4,5]},{"name":"Ben C","handicap":0.0,"scores":[4,4,4,3,5,4,4,4,6]},{"name":"Bill T","handicap":0.0,"scores":[4,4,4,3,5,4,4,4,6]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Scott N","handicap":0.0,"scores":[4,3,4,3,4,3,3,4,5]},{"name":"John C","handicap":0.0,"scores":[4,3,4,3,4,3,3,4,5]},{"name":"Don J","handicap":6.0,"scores":[6,4,6,6,6,5,6,6,7]},{"name":"Matt -","handicap":6.0,"scores":[6,4,6,6,6,5,6,6,7]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"David M","handicap":0.0,"scores":[4,3,4,5,5,3,4,4,5]},{"name":"Pickles -","handicap":0.0,"scores":[4,3,4,5,5,3,4,4,5]},{"name":"Dan B","handicap":4.0,"scores":[4,2,6,4,6,3,5,5,5]},{"name":"Schetter -","handicap":4.0,"scores":[4,2,6,4,6,3,5,5,5]}]},{"par":[4,3,5,4,4,3,4,4,5],"players":[{"name":"Troy C","handicap":0.0,"scores":[4,4,4,4,4,3,4,4,5]},{"name":"Bill P","handicap":0.0,"scores":[4,4,4,4,4,3,4,4,5]},{"name":"Steve G","handicap":0.0,"scores":[4,3,5,4,3,4,5,5,6]},{"name":"Joe J","handicap":0.0,"scores":[4,3,5,4,3,4,5,5,6]}]}]}]};
+
+// ═══════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════
+const { teamMap, weeks } = LEAGUE;
+
+function teamName(id) { return teamMap[String(id)]?.name || `Team ${id}`; }
+function teamPlayers(id) { return teamMap[String(id)]?.players || []; }
+
+// Build a lookup: playerName -> teamId
+const playerTeam = {};
+for (const [id, t] of Object.entries(teamMap)) {
+  for (const p of t.players) playerTeam[p] = id;
+}
+
+// Compute season totals
+function seasonTotals() {
+  const totals = {};
+  for (const id of Object.keys(teamMap)) {
+    totals[id] = { matchPts: 0, skins: 0, byWeek: [] };
+  }
+  for (const w of weeks) {
+    for (const id of Object.keys(teamMap)) {
+      const mp = w.matchPoints[id] ?? 0;
+      const sk = w.skins[id] ?? 0;
+      totals[id].matchPts += mp;
+      totals[id].skins += sk;
+      totals[id].byWeek.push(mp);
+    }
+  }
+  return totals;
+}
+
+// ═══════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+
+  if (name === 'standings') renderStandings();
+  if (name === 'scorecards') renderScorecardSelectors();
+  if (name === 'handicaps') renderHandicaps();
+  if (name === 'skins') renderSkins();
+}
+
+// ═══════════════════════════════════════
+//  STANDINGS
+// ═══════════════════════════════════════
+function renderStandings() {
+  const totals = seasonTotals();
+  const lastWeek = weeks[weeks.length - 1];
+
+  document.getElementById('standings-sub').textContent =
+    `Through ${lastWeek.label} (${lastWeek.date}) · ${weeks.length} weeks played`;
+  document.getElementById('standings-week-label').textContent =
+    weeks.map(w => w.label).join(' · ');
+
+  // Build header
+  const thead = document.getElementById('standings-thead');
+  thead.innerHTML = `<th>Pos</th><th>Team</th><th>Players</th>` +
+    weeks.map(w => `<th class="num">${w.label}</th>`).join('') +
+    `<th class="num">Total</th><th class="num">Skins</th>`;
+
+  // Sort by total match points desc
+  const sorted = Object.keys(totals).sort((a, b) =>
+    totals[b].matchPts - totals[a].matchPts ||
+    totals[b].skins - totals[a].skins
+  );
+
+  const tbody = document.getElementById('standings-tbody');
+  tbody.innerHTML = '';
+
+  let rank = 1;
+  for (let i = 0; i < sorted.length; i++) {
+    const id = sorted[i];
+    const t = totals[id];
+
+    // Handle ties
+    if (i > 0 && t.matchPts === totals[sorted[i-1]].matchPts) {
+      // same rank
+    } else {
+      rank = i + 1;
+    }
+
+    const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
+
+    const weekCells = t.byWeek.map(v =>
+      `<td class="num">${v > 0 ? v.toFixed(1) : '–'}</td>`
+    ).join('');
+
+    const skinsDots = t.skins > 0
+      ? Array(t.skins).fill('<span class="skin-dot"></span>').join('')
+      : '–';
+
+    tbody.innerHTML += `<tr>
+      <td><span class="rank-badge ${rankClass}">${rank}</span></td>
+      <td><strong>${teamName(id)}</strong></td>
+      <td style="color:var(--text-muted);font-size:0.8rem;">${teamPlayers(id).join(' &amp; ')}</td>
+      ${weekCells}
+      <td class="num"><span class="pts-pill">${t.matchPts.toFixed(1)}</span></td>
+      <td class="num">${skinsDots} ${t.skins > 0 ? `<span style="font-size:0.75rem;color:var(--text-muted);">(${t.skins})</span>` : ''}</td>
+    </tr>`;
+  }
+}
+
+// ═══════════════════════════════════════
+//  SCORECARDS
+// ═══════════════════════════════════════
+function renderScorecardSelectors() {
+  const weekSel = document.getElementById('sc-week-select');
+  const teamSel = document.getElementById('sc-team-select');
+
+  if (weekSel.options.length === 0) {
+    weeks.forEach((w, i) => {
+      weekSel.add(new Option(`${w.label} — ${w.date}`, i));
+    });
+  }
+
+  weekSel.onchange = () => populateTeamSelect();
+  teamSel.onchange = () => renderScorecard();
+
+  populateTeamSelect();
+}
+
+function populateTeamSelect() {
+  const wi = parseInt(document.getElementById('sc-week-select').value);
+  const week = weeks[wi];
+  const teamSel = document.getElementById('sc-team-select');
+  teamSel.innerHTML = '';
+
+  // Find teams that have scorecards this week
+  const teamsThisWeek = new Set();
+  for (const sc of week.scorecards) {
+    for (const p of sc.players) {
+      const tid = playerTeam[p.name];
+      if (tid) teamsThisWeek.add(tid);
+    }
+  }
+
+  const sorted = Array.from(teamsThisWeek).sort((a,b) =>
+    (week.matchPoints[b] ?? 0) - (week.matchPoints[a] ?? 0)
+  );
+
+  for (const tid of sorted) {
+    const mp = week.matchPoints[tid] ?? 0;
+    teamSel.add(new Option(`${teamName(tid)} — ${mp} pts`, tid));
+  }
+
+  renderScorecard();
+}
+
+function renderScorecard() {
+  const wi = parseInt(document.getElementById('sc-week-select').value);
+  const tid = document.getElementById('sc-team-select').value;
+  const week = weeks[wi];
+  const players = teamPlayers(tid);
+  const display = document.getElementById('scorecard-display');
+
+  // Find the scorecard(s) containing these players
+  const cards = week.scorecards.filter(sc =>
+    sc.players.some(p => players.includes(p.name))
+  );
+
+  if (cards.length === 0) {
+    display.innerHTML = '<div class="empty-state"><div class="icon">🏌️</div><p>No scorecard found for this team this week.</p></div>';
+    return;
+  }
+
+  // Team players first, others second (they're playing partners on the same card)
+  const html = cards.map(card => {
+    const par = card.par;
+    const total = par.reduce((a,b) => a + (b||0), 0);
+    const holes = par.length;
+
+    let headerRow = `<th class="left">Player</th><th class="num">HDCP</th>`;
+    for (let h = 0; h < holes; h++) headerRow += `<th>${h+1}</th>`;
+    headerRow += `<th class="num">OUT</th>`;
+
+    let parRow = `<td class="left par-row">Par</td><td class="par-row"></td>`;
+    let parOut = 0;
+    for (let h = 0; h < holes; h++) { parRow += `<td class="par-row">${par[h] ?? ''}</td>`; parOut += par[h]||0; }
+    parRow += `<td class="par-row total-col">${parOut}</td>`;
+
+    const playerRows = card.players.map(pl => {
+      const isTeamPlayer = players.includes(pl.name);
+      let out = 0, hasScores = false;
+      let cells = '';
+      for (let h = 0; h < holes; h++) {
+        const s = pl.scores[h];
+        const p = par[h];
+        if (s !== null && s !== undefined && p) {
+          out += s; hasScores = true;
+          const diff = s - p;
+          let cls = 'score-par';
+          if (diff <= -2) cls = 'score-eagle';
+          else if (diff === -1) cls = 'score-birdie';
+          else if (diff === 1) cls = 'score-bogey';
+          else if (diff >= 2) cls = 'score-double';
+
+          if (diff <= -1) {
+            cells += `<td><span class="${cls}">${s}</span></td>`;
+          } else {
+            cells += `<td class="${cls}">${s}</td>`;
+          }
+        } else {
+          cells += `<td>–</td>`;
+        }
+      }
+      const outTd = hasScores ? `<td class="total-col">${out}</td>` : `<td class="total-col">–</td>`;
+      const style = isTeamPlayer ? 'font-weight:600;' : 'opacity:0.65;';
+      return `<tr class="player-row">
+        <td class="left" style="${style}">${pl.name}${isTeamPlayer ? '' : ' ✧'}</td>
+        <td class="num">${pl.handicap > 0 ? pl.handicap : '–'}</td>
+        ${cells}${outTd}
+      </tr>`;
+    }).join('');
+
+    const mp = week.matchPoints[tid] ?? '–';
+    const sk = (week.skins[tid] ?? 0) > 0 ? ' 🏆 Skin' : '';
+
+    return `<div class="card" style="margin-bottom:16px;">
+      <div class="card-header">
+        ${teamName(tid)} · ${week.label} · ${mp} match pts${sk}
+        <span style="font-size:0.75rem;opacity:0.7;">✧ playing partner</span>
+      </div>
+      <div class="scorecard-wrap">
+        <table class="scorecard-table">
+          <thead><tr>${headerRow}</tr></thead>
+          <tbody>
+            <tr>${parRow}</tr>
+            ${playerRows}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join('');
+
+  display.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+//  HANDICAPS
+// ═══════════════════════════════════════
+let hdcpChart = null;
+
+function renderHandicaps() {
+  // Latest week handicaps
+  const latest = weeks[weeks.length - 1];
+  const tbody = document.getElementById('hdcp-tbody');
+  tbody.innerHTML = '';
+
+  // Get all players with their latest handicap, sorted desc
+  const players = Object.entries(latest.handicaps)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+
+  for (const [name, hdcp] of players) {
+    const tid = playerTeam[name];
+    const tname = tid ? teamName(tid) : '–';
+    tbody.innerHTML += `<tr>
+      <td>${name}</td>
+      <td style="color:var(--text-muted);font-size:0.8rem;">${tname}</td>
+      <td class="num"><strong>${hdcp > 0 ? hdcp.toFixed(1) : 'Scratch'}</strong></td>
+    </tr>`;
+  }
+
+  // Player selector for trend chart
+  const sel = document.getElementById('hdcp-player-select');
+  if (sel.options.length === 0) {
+    const allPlayers = new Set();
+    for (const w of weeks) Object.keys(w.handicaps).forEach(p => allPlayers.add(p));
+    const sorted = Array.from(allPlayers).sort();
+    for (const p of sorted) sel.add(new Option(p, p));
+    sel.onchange = () => renderHdcpChart();
+  }
+  renderHdcpChart();
+}
+
+function renderHdcpChart() {
+  const player = document.getElementById('hdcp-player-select').value;
+  const labels = weeks.map(w => w.label);
+  const data = weeks.map(w => w.handicaps[player] ?? null);
+
+  const ctx = document.getElementById('hdcp-chart').getContext('2d');
+  if (hdcpChart) hdcpChart.destroy();
+
+  hdcpChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: player,
+        data,
+        borderColor: '#2d5a40',
+        backgroundColor: 'rgba(45,90,64,0.12)',
+        pointBackgroundColor: '#c9a84c',
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        borderWidth: 2.5,
+        tension: 0.3,
+        fill: true,
+        spanGaps: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `Handicap: ${ctx.raw === 0 ? 'Scratch' : ctx.raw}`
+          }
+        }
+      },
+      scales: {
+        y: {
+          reverse: false,
+          min: 0,
+          title: { display: true, text: 'Handicap', color: '#5a7060' },
+          grid: { color: '#e0e8dc' },
+          ticks: { color: '#5a7060' }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: '#5a7060' }
+        }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════
+//  SKINS
+// ═══════════════════════════════════════
+function renderSkins() {
+  // Weekly breakdown
+  const weeklyDiv = document.getElementById('skins-weekly');
+  weeklyDiv.innerHTML = '';
+
+  for (const w of weeks) {
+    const winners = Object.entries(w.skins).filter(([,v]) => v > 0);
+    const winnersHtml = winners.length
+      ? winners.map(([id]) =>
+          `<span class="winner-chip">🏆 ${teamName(id)}</span>`
+        ).join('')
+      : `<span class="no-skins">No skins recorded</span>`;
+
+    weeklyDiv.innerHTML += `<div class="card" style="margin-bottom:14px;">
+      <div class="card-header">${w.label} — ${w.date}</div>
+      <div class="card-body" style="padding:14px 18px;">
+        <div>${winnersHtml}</div>
+      </div>
+    </div>`;
+  }
+
+  // Season totals
+  const totals = {};
+  for (const id of Object.keys(teamMap)) totals[id] = 0;
+  for (const w of weeks) {
+    for (const [id, v] of Object.entries(w.skins)) totals[id] = (totals[id]||0) + v;
+  }
+
+  const sorted = Object.entries(totals)
+    .filter(([,v]) => v > 0)
+    .sort((a,b) => b[1]-a[1]);
+
+  // Add zeros at end
+  const zeros = Object.entries(totals).filter(([,v]) => v === 0).sort((a,b) => a[0]-b[0]);
+  const all = [...sorted, ...zeros];
+
+  const tbody = document.getElementById('skins-total-tbody');
+  tbody.innerHTML = '';
+  let rank = 1;
+  for (let i = 0; i < all.length; i++) {
+    const [id, v] = all[i];
+    if (i > 0 && v !== all[i-1][1]) rank = i + 1;
+    const rankClass = v === 0 ? 'rank-other' : rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : 'rank-3';
+    const dots = v > 0 ? Array(v).fill('<span class="skin-dot"></span>').join('') : '';
+    tbody.innerHTML += `<tr>
+      <td><span class="rank-badge ${rankClass}">${v === 0 ? '–' : rank}</span></td>
+      <td>${teamName(id)}</td>
+      <td class="num">${dots} ${v}</td>
+    </tr>`;
+  }
+}
+
+// ═══════════════════════════════════════
+//  UPLOAD / PREVIEW
+// ═══════════════════════════════════════
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  if (e.dataTransfer.files[0]) processUpload(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) processUpload(e.target.files[0]);
+});
+
+function processUpload(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const result = parseSquabbitCSV(e.target.result);
+      showUploadResult(true, `✅ Parsed successfully: ${result.numTeams} teams, ${result.numPlayers} players, ${result.numScorecards} scorecards`, result);
+    } catch(err) {
+      showUploadResult(false, `❌ Parse error: ${err.message}`);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function parseSquabbitCSV(text) {
+  const lines = text.split('\n').map(l => l.trim().replace(/\r/, ''));
+  const result = { matchPoints: {}, skins: {}, handicaps: {}, scorecards: [] };
+
+  let mode = null;
+  let currentTeam = null;
+
+  for (const l of lines) {
+    if (l === 'Team Matchplay') { mode = 'match'; continue; }
+    if (l === 'Team Skins')    { mode = 'skins'; continue; }
+
+    if (mode === 'match' || mode === 'skins') {
+      const parts = l.split(',').map(s => s.trim());
+      if (!l || parts[0] === 'Team') continue;
+      if (parts[0].match(/^\d+$/) && (parts[1] === '' || !parts[1])) {
+        currentTeam = parts[0];
+        const v = parseFloat(parts[2]) || 0;
+        if (mode === 'match') result.matchPoints[currentTeam] = v;
+        else result.skins[currentTeam] = v;
+      }
+    }
+  }
+
+  // Scorecards
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes('Nahma Golf Club') && i > 50) {
+      let par = null;
+      const players = [];
+      for (let j = i+1; j < Math.min(i+60, lines.length); j++) {
+        const parts = lines[j].split(',').map(s=>s.trim());
+        if (parts[0] === 'Par') {
+          par = [];
+          for (let k=3; k<12; k++) { try { par.push(parseInt(parts[k])); } catch { par.push(null); } }
+        } else if (parts[1] && parts[1].includes('Tee') && parts[0]) {
+          const scores = [];
+          for (let k=3; k<12; k++) { const v = parseInt(parts[k]); scores.push(isNaN(v) ? null : v); }
+          players.push({ name: parts[0], handicap: parseFloat(parts[2])||0, scores });
+          result.handicaps[parts[0]] = parseFloat(parts[2]) || 0;
+        } else if (lines[j] === '' && players.length) break;
+      }
+      if (par && players.length) result.scorecards.push({ par, players });
+    }
+  }
+
+  result.numTeams = Object.keys(result.matchPoints).length;
+  result.numPlayers = Object.keys(result.handicaps).length;
+  result.numScorecards = result.scorecards.length;
+  return result;
+}
+
+function showUploadResult(ok, msg, data) {
+  const el = document.getElementById('upload-result');
+  el.className = 'upload-result ' + (ok ? 'ok' : 'err');
+  el.style.display = 'block';
+  el.textContent = msg;
+
+  const preview = document.getElementById('preview-tables');
+  if (!ok || !data) { preview.innerHTML = ''; return; }
+
+  const topTeams = Object.entries(data.matchPoints)
+    .sort((a,b) => b[1]-a[1]).slice(0,5);
+
+  preview.innerHTML = `<div style="font-size:0.82rem;font-weight:600;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;">Top 5 Teams This Week</div>
+  <table class="data-table">
+    <thead><tr><th>Team</th><th class="num">Pts</th><th class="num">Skin</th></tr></thead>
+    <tbody>${topTeams.map(([id,pts]) => `<tr>
+      <td>${teamName(id)}</td>
+      <td class="num">${pts}</td>
+      <td class="num">${(data.skins[id]||0) > 0 ? '🏆' : '–'}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+renderStandings();
+</script>
+</body>
+</html>
