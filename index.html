@@ -887,9 +887,13 @@ function renderHdcpChart() {
   const players = teamPlayers(tid);
   const labels = weeks.map(w => w.label);
   
-  // Calculate historical rolling handicap arrays for the trend line
-  const data1 = weeks.map((w, idx) => calculateRollingHandicap(players[0], idx));
-  const data2 = weeks.map((w, idx) => calculateRollingHandicap(players[1], idx));
+  // 1. Gather historical Official Handicaps
+  const officialData1 = weeks.map(w => w.handicaps[players[0]] ?? null);
+  const officialData2 = weeks.map(w => w.handicaps[players[1]] ?? null);
+
+  // 2. Gather historical Rolling Handicaps
+  const rollingData1 = weeks.map((w, idx) => getRollingHandicap(players[0], idx));
+  const rollingData2 = weeks.map((w, idx) => getRollingHandicap(players[1], idx));
 
   const ctx = document.getElementById('hdcp-chart').getContext('2d');
   if (hdcpChart) hdcpChart.destroy();
@@ -899,26 +903,52 @@ function renderHdcpChart() {
     data: {
       labels,
       datasets: [
+        // --- PLAYER 1 DATASETS ---
         {
-          label: `${players[0]} (4-Wk Rolling)`,
-          data: data1,
-          borderColor: '#2d5a40',
-          backgroundColor: 'rgba(45,90,64,0.12)',
+          label: `${players[0]} (Official)`,
+          data: officialData1,
+          borderColor: '#2d5a40',       // Dark Green
+          backgroundColor: 'transparent',
           pointBackgroundColor: '#2d5a40',
           pointRadius: 5,
-          borderWidth: 2.5,
-          tension: 0.3,
+          borderWidth: 3,                // Thicker line for the official baseline
+          tension: 0.2,
           spanGaps: true,
         },
         {
-          label: `${players[1] || 'Player 2'} (4-Wk Rolling)`,
-          data: data2,
-          borderColor: '#c9a84c',
-          backgroundColor: 'rgba(201,168,76,0.12)',
+          label: `${players[0]} (Rolling)`,
+          data: rollingData1,
+          borderColor: '#4d8a64',       // Medium Green
+          backgroundColor: 'transparent',
+          pointBackgroundColor: '#4d8a64',
+          pointRadius: 4,
+          borderWidth: 2,
+          borderDash: [5, 5],           // Dashed line for rolling trend
+          tension: 0.2,
+          spanGaps: true,
+        },
+        // --- PLAYER 2 DATASETS ---
+        {
+          label: `${players[1] || 'Player 2'} (Official)`,
+          data: officialData2,
+          borderColor: '#c9a84c',       // Dark Gold
+          backgroundColor: 'transparent',
           pointBackgroundColor: '#c9a84c',
           pointRadius: 5,
-          borderWidth: 2.5,
-          tension: 0.3,
+          borderWidth: 3,                // Thicker line for official baseline
+          tension: 0.2,
+          spanGaps: true,
+        },
+        {
+          label: `${players[1] || 'Player 2'} (Rolling)`,
+          data: rollingData2,
+          borderColor: '#e5c46e',       // Light/Medium Gold
+          backgroundColor: 'transparent',
+          pointBackgroundColor: '#e5c46e',
+          pointRadius: 4,
+          borderWidth: 2,
+          borderDash: [5, 5],           // Dashed line for rolling trend
+          tension: 0.2,
           spanGaps: true,
         }
       ]
@@ -927,17 +957,30 @@ function renderHdcpChart() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { display: true, position: 'top', labels: { usePointStyle: true, boxWidth: 8, color: '#5a7060' } },
+        legend: { 
+          display: true, 
+          position: 'top', 
+          labels: { 
+            usePointStyle: true, 
+            boxWidth: 6, 
+            color: '#5a7060',
+            font: { size: 11 }
+          } 
+        },
         tooltip: {
           callbacks: {
-            label: ctx => `${ctx.dataset.label}: ${ctx.raw === 0 ? 'Scratch' : ctx.raw.toFixed(1)}`
+            label: ctx => {
+              const val = ctx.raw;
+              const formattedVal = (val !== null && val !== undefined) ? Number(val).toFixed(1) : '–';
+              return `${ctx.dataset.label}: ${formattedVal}`;
+            }
           }
         }
       },
       scales: {
         y: {
           min: 0,
-          title: { display: true, text: 'Handicap Index', color: '#5a7060' },
+          title: { display: true, text: 'Handicap / Strokes Over Par', color: '#5a7060' },
           grid: { color: '#e0e8dc' },
           ticks: { color: '#5a7060' }
         },
