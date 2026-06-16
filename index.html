@@ -436,12 +436,10 @@
   </div>
 
   <!-- ══ SCORECARDS ══ -->
-  <div class="page" id="page-scorecards">
+<div class="page" id="page-scorecards">
     <div class="page-title">Scorecards</div>
-    <div class="page-sub">Hole-by-hole scores for each team</div>
+    <div class="page-sub">Season history by team</div>
     <div class="selector-row">
-      <label>Week</label>
-      <select id="sc-week-select"></select>
       <label>Team</label>
       <select id="sc-team-select"></select>
     </div>
@@ -451,16 +449,16 @@
   <!-- ══ HANDICAPS ══ -->
   <div class="page" id="page-handicaps">
     <div class="page-title">Handicaps</div>
-    <div class="page-sub">Player handicaps by week (0 = scratch)</div>
+    <div class="page-sub">Player handicaps by team (0 = scratch)</div>
     <div class="two-col">
       <div class="card">
         <div class="card-header">Current Handicaps</div>
         <div style="overflow-x:auto;">
           <table class="data-table" id="hdcp-table">
             <thead><tr>
-              <th>Player</th>
               <th>Team</th>
-              <th class="num">Handicap</th>
+              <th>Players (HDCP)</th>
+              <th class="num">Combined</th>
             </tr></thead>
             <tbody id="hdcp-tbody"></tbody>
           </table>
@@ -468,11 +466,11 @@
       </div>
       <div>
         <div class="card">
-          <div class="card-header">Trend by Player</div>
+          <div class="card-header">Trend by Team</div>
           <div class="card-body">
             <div class="selector-row" style="margin-bottom:12px;">
-              <label>Player</label>
-              <select id="hdcp-player-select"></select>
+              <label>Team</label>
+              <select id="hdcp-team-select"></select>
             </div>
             <div class="chart-wrap"><canvas id="hdcp-chart"></canvas></div>
           </div>
@@ -682,134 +680,102 @@ function renderStandings() {
 //  SCORECARDS
 // ═══════════════════════════════════════
 function renderScorecardSelectors() {
-  const weekSel = document.getElementById('sc-week-select');
   const teamSel = document.getElementById('sc-team-select');
 
-  if (weekSel.options.length === 0) {
-    weeks.forEach((w, i) => {
-      weekSel.add(new Option(`${w.label} — ${w.date}`, i));
+  // Populate all teams once
+  if (teamSel.options.length === 0) {
+    Object.entries(teamMap)
+      .sort((a,b) => parseInt(a[0]) - parseInt(b[0])) // Keep numerical order
+      .forEach(([id, t]) => {
+        teamSel.add(new Option(t.name, id));
     });
   }
 
-  weekSel.onchange = () => populateTeamSelect();
   teamSel.onchange = () => renderScorecard();
-
-  populateTeamSelect();
-}
-
-function populateTeamSelect() {
-  const wi = parseInt(document.getElementById('sc-week-select').value);
-  const week = weeks[wi];
-  const teamSel = document.getElementById('sc-team-select');
-  teamSel.innerHTML = '';
-
-  // Find teams that have scorecards this week
-  const teamsThisWeek = new Set();
-  for (const sc of week.scorecards) {
-    for (const p of sc.players) {
-      const tid = playerTeam[p.name];
-      if (tid) teamsThisWeek.add(tid);
-    }
-  }
-
-  const sorted = Array.from(teamsThisWeek).sort((a,b) =>
-    (week.matchPoints[b] ?? 0) - (week.matchPoints[a] ?? 0)
-  );
-
-  for (const tid of sorted) {
-    const mp = week.matchPoints[tid] ?? 0;
-    teamSel.add(new Option(`${teamName(tid)} — ${mp} pts`, tid));
-  }
-
-  renderScorecard();
+  renderScorecard(); // Initial load
 }
 
 function renderScorecard() {
-  const wi = parseInt(document.getElementById('sc-week-select').value);
   const tid = document.getElementById('sc-team-select').value;
-  const week = weeks[wi];
   const players = teamPlayers(tid);
   const display = document.getElementById('scorecard-display');
 
-  // Find the scorecard(s) containing these players
-  const cards = week.scorecards.filter(sc =>
-    sc.players.some(p => players.includes(p.name))
-  );
+  let html = '';
 
-  if (cards.length === 0) {
-    display.innerHTML = '<div class="empty-state"><div class="icon">🏌️</div><p>No scorecard found for this team this week.</p></div>';
-    return;
-  }
+  // Loop through all weeks and aggregate scorecards for the selected team
+  weeks.forEach((week) => {
+    const cards = week.scorecards.filter(sc =>
+      sc.players.some(p => players.includes(p.name))
+    );
 
-  // Team players first, others second (they're playing partners on the same card)
-  const html = cards.map(card => {
-    const par = card.par;
-    const total = par.reduce((a,b) => a + (b||0), 0);
-    const holes = par.length;
+    cards.forEach(card => {
+      const par = card.par;
+      const total = par.reduce((a,b) => a + (b||0), 0);
+      const holes = par.length;
 
-    let headerRow = `<th class="left">Player</th><th class="num">HDCP</th>`;
-    for (let h = 0; h < holes; h++) headerRow += `<th>${h+1}</th>`;
-    headerRow += `<th class="num">OUT</th>`;
+      let headerRow = `<th class="left">Player</th><th class="num">HDCP</th>`;
+      for (let h = 0; h < holes; h++) headerRow += `<th>${h+1}</th>`;
+      headerRow += `<th class="num">OUT</th>`;
 
-    let parRow = `<td class="left par-row">Par</td><td class="par-row"></td>`;
-    let parOut = 0;
-    for (let h = 0; h < holes; h++) { parRow += `<td class="par-row">${par[h] ?? ''}</td>`; parOut += par[h]||0; }
-    parRow += `<td class="par-row total-col">${parOut}</td>`;
+      let parRow = `<td class="left par-row">Par</td><td class="par-row"></td>`;
+      let parOut = 0;
+      for (let h = 0; h < holes; h++) { parRow += `<td class="par-row">${par[h] ?? ''}</td>`; parOut += par[h]||0; }
+      parRow += `<td class="par-row total-col">${parOut}</td>`;
 
-    const playerRows = card.players.map(pl => {
-      const isTeamPlayer = players.includes(pl.name);
-      let out = 0, hasScores = false;
-      let cells = '';
-      for (let h = 0; h < holes; h++) {
-        const s = pl.scores[h];
-        const p = par[h];
-        if (s !== null && s !== undefined && p) {
-          out += s; hasScores = true;
-          const diff = s - p;
-          let cls = 'score-par';
-          if (diff <= -2) cls = 'score-eagle';
-          else if (diff === -1) cls = 'score-birdie';
-          else if (diff === 1) cls = 'score-bogey';
-          else if (diff >= 2) cls = 'score-double';
+      const playerRows = card.players.map(pl => {
+        const isTeamPlayer = players.includes(pl.name);
+        let out = 0, hasScores = false;
+        let cells = '';
+        for (let h = 0; h < holes; h++) {
+          const s = pl.scores[h];
+          const p = par[h];
+          if (s !== null && s !== undefined && p) {
+            out += s; hasScores = true;
+            const diff = s - p;
+            let cls = 'score-par';
+            if (diff <= -2) cls = 'score-eagle';
+            else if (diff === -1) cls = 'score-birdie';
+            else if (diff === 1) cls = 'score-bogey';
+            else if (diff >= 2) cls = 'score-double';
 
-          if (diff <= -1) {
-            cells += `<td><span class="${cls}">${s}</span></td>`;
+            cells += (diff <= -1) ? `<td><span class="${cls}">${s}</span></td>` : `<td class="${cls}">${s}</td>`;
           } else {
-            cells += `<td class="${cls}">${s}</td>`;
+            cells += `<td>–</td>`;
           }
-        } else {
-          cells += `<td>–</td>`;
         }
-      }
-      const outTd = hasScores ? `<td class="total-col">${out}</td>` : `<td class="total-col">–</td>`;
-      const style = isTeamPlayer ? 'font-weight:600;' : 'opacity:0.65;';
-      return `<tr class="player-row">
-        <td class="left" style="${style}">${pl.name}${isTeamPlayer ? '' : ' ✧'}</td>
-        <td class="num">${pl.handicap > 0 ? pl.handicap : '–'}</td>
-        ${cells}${outTd}
-      </tr>`;
-    }).join('');
+        const outTd = hasScores ? `<td class="total-col">${out}</td>` : `<td class="total-col">–</td>`;
+        const style = isTeamPlayer ? 'font-weight:600;' : 'opacity:0.65;';
+        return `<tr class="player-row">
+          <td class="left" style="${style}">${pl.name}${isTeamPlayer ? '' : ' ✧'}</td>
+          <td class="num">${pl.handicap > 0 ? pl.handicap : '–'}</td>
+          ${cells}${outTd}
+        </tr>`;
+      }).join('');
 
-    const mp = week.matchPoints[tid] ?? '–';
-    const sk = (week.skins[tid] ?? 0) > 0 ? ' 🏆 Skin' : '';
+      const mp = week.matchPoints[tid] ?? '–';
+      const sk = (week.skins[tid] ?? 0) > 0 ? ' 🏆 Skin' : '';
 
-    return `<div class="card" style="margin-bottom:16px;">
-      <div class="card-header">
-        ${teamName(tid)} · ${week.label} · ${mp} match pts${sk}
-        <span style="font-size:0.75rem;opacity:0.7;">✧ playing partner</span>
-      </div>
-      <div class="scorecard-wrap">
-        <table class="scorecard-table">
-          <thead><tr>${headerRow}</tr></thead>
-          <tbody>
-            <tr>${parRow}</tr>
-            ${playerRows}
-          </tbody>
-        </table>
-      </div>
-    </div>`;
-  }).join('');
+      html += `<div class="card" style="margin-bottom:16px;">
+        <div class="card-header">
+          ${week.label} · ${teamName(tid)} · ${mp} match pts${sk}
+          <span style="font-size:0.75rem;opacity:0.7;">✧ playing partner</span>
+        </div>
+        <div class="scorecard-wrap">
+          <table class="scorecard-table">
+            <thead><tr>${headerRow}</tr></thead>
+            <tbody>
+              <tr>${parRow}</tr>
+              ${playerRows}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+    });
+  });
 
+  if (!html) {
+    html = '<div class="empty-state"><div class="icon">🏌️</div><p>No scorecards found for this team yet.</p></div>';
+  }
   display.innerHTML = html;
 }
 
@@ -819,41 +785,50 @@ function renderScorecard() {
 let hdcpChart = null;
 
 function renderHandicaps() {
-  // Latest week handicaps
   const latest = weeks[weeks.length - 1];
   const tbody = document.getElementById('hdcp-tbody');
   tbody.innerHTML = '';
 
-  // Get all players with their latest handicap, sorted desc
-  const players = Object.entries(latest.handicaps)
-    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  // Group latest handicaps by team
+  const teamHdcps = Object.keys(teamMap).map(tid => {
+    const p = teamPlayers(tid);
+    const h1 = latest.handicaps[p[0]] ?? 0;
+    const h2 = latest.handicaps[p[1]] ?? 0;
+    return { tid, name: teamName(tid), p1: p[0], h1, p2: p[1], h2, total: h1 + h2 };
+  });
 
-  for (const [name, hdcp] of players) {
-    const tid = playerTeam[name];
-    const tname = tid ? teamName(tid) : '–';
+  // Sort by combined handicap ascending (lowest handicap teams first)
+  teamHdcps.sort((a,b) => a.total - b.total || a.name.localeCompare(b.name));
+
+  for (const t of teamHdcps) {
     tbody.innerHTML += `<tr>
-      <td>${name}</td>
-      <td style="color:var(--text-muted);font-size:0.8rem;">${tname}</td>
-      <td class="num"><strong>${hdcp > 0 ? hdcp.toFixed(1) : 'Scratch'}</strong></td>
+      <td><strong>${t.name}</strong></td>
+      <td style="color:var(--text-muted);font-size:0.8rem;">
+        ${t.p1} (${t.h1 > 0 ? t.h1.toFixed(1) : 'Scr'}) &amp; ${t.p2} (${t.h2 > 0 ? t.h2.toFixed(1) : 'Scr'})
+      </td>
+      <td class="num"><strong>${t.total > 0 ? t.total.toFixed(1) : 'Scratch'}</strong></td>
     </tr>`;
   }
 
-  // Player selector for trend chart
-  const sel = document.getElementById('hdcp-player-select');
+  // Populate Team Selector for Chart
+  const sel = document.getElementById('hdcp-team-select');
   if (sel.options.length === 0) {
-    const allPlayers = new Set();
-    for (const w of weeks) Object.keys(w.handicaps).forEach(p => allPlayers.add(p));
-    const sorted = Array.from(allPlayers).sort();
-    for (const p of sorted) sel.add(new Option(p, p));
+    Object.entries(teamMap)
+      .sort((a,b) => parseInt(a[0]) - parseInt(b[0]))
+      .forEach(([id, t]) => { sel.add(new Option(t.name, id)); });
     sel.onchange = () => renderHdcpChart();
   }
   renderHdcpChart();
 }
 
 function renderHdcpChart() {
-  const player = document.getElementById('hdcp-player-select').value;
+  const tid = document.getElementById('hdcp-team-select').value;
+  const players = teamPlayers(tid);
   const labels = weeks.map(w => w.label);
-  const data = weeks.map(w => w.handicaps[player] ?? null);
+  
+  // Create datasets for both players
+  const data1 = weeks.map(w => w.handicaps[players[0]] ?? null);
+  const data2 = weeks.map(w => w.handicaps[players[1]] ?? null);
 
   const ctx = document.getElementById('hdcp-chart').getContext('2d');
   if (hdcpChart) hdcpChart.destroy();
@@ -862,34 +837,44 @@ function renderHdcpChart() {
     type: 'line',
     data: {
       labels,
-      datasets: [{
-        label: player,
-        data,
-        borderColor: '#2d5a40',
-        backgroundColor: 'rgba(45,90,64,0.12)',
-        pointBackgroundColor: '#c9a84c',
-        pointRadius: 6,
-        pointHoverRadius: 8,
-        borderWidth: 2.5,
-        tension: 0.3,
-        fill: true,
-        spanGaps: true,
-      }]
+      datasets: [
+        {
+          label: players[0],
+          data: data1,
+          borderColor: '#2d5a40',
+          backgroundColor: 'rgba(45,90,64,0.12)',
+          pointBackgroundColor: '#2d5a40',
+          pointRadius: 5,
+          borderWidth: 2.5,
+          tension: 0.3,
+          spanGaps: true,
+        },
+        {
+          label: players[1] || 'Player 2',
+          data: data2,
+          borderColor: '#c9a84c',
+          backgroundColor: 'rgba(201,168,76,0.12)',
+          pointBackgroundColor: '#c9a84c',
+          pointRadius: 5,
+          borderWidth: 2.5,
+          tension: 0.3,
+          spanGaps: true,
+        }
+      ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { display: false },
+        legend: { display: true, position: 'top', labels: { usePointStyle: true, boxWidth: 8, color: '#5a7060' } },
         tooltip: {
           callbacks: {
-            label: ctx => `Handicap: ${ctx.raw === 0 ? 'Scratch' : ctx.raw}`
+            label: ctx => `${ctx.dataset.label}: ${ctx.raw === 0 ? 'Scratch' : ctx.raw}`
           }
         }
       },
       scales: {
         y: {
-          reverse: false,
           min: 0,
           title: { display: true, text: 'Handicap', color: '#5a7060' },
           grid: { color: '#e0e8dc' },
